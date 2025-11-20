@@ -175,3 +175,10 @@
 - [x] Criar projeção financeira para próximos 12 meses
 - [x] Implementar gráfico de fluxo de recebimento projetado
 - [x] Adicionar comparativo: recebimento esperado vs realizado
+
+## Commit no GitHub
+- [ ] Configurar repositório remoto do GitHub
+- [ ] Adicionar todos os arquivos ao staging
+- [ ] Fazer commit com mensagem descritiva
+- [ ] Push para o repositório remoto
+- [ ] Verificar commit no GitHub
