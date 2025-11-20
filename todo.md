@@ -113,3 +113,9 @@
 - [x] Criar tabela de pagamentos individuais
 - [x] Reimportar dados com todas as informações
 - [x] Atualizar interface para exibir pagamentos
+
+## Correção de Campos Faltantes
+- [x] Verificar campos atuais no schema de festas
+- [x] Confirmar que Código, Data de Fechamento, Data da Festa e Número de Convidados existem
+- [x] Verificar se os dados foram importados corretamente
+- [x] Atualizar interface para exibir todos os campos

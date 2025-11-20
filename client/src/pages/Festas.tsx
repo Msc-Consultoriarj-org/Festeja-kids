@@ -103,6 +103,7 @@ export default function Festas() {
                   <TableRow>
                     <TableHead>Código</TableHead>
                     <TableHead>Cliente</TableHead>
+                    <TableHead>Fechamento</TableHead>
                     <TableHead>Data da Festa</TableHead>
                     <TableHead>Convidados</TableHead>
                     <TableHead>Valor</TableHead>
@@ -117,6 +118,7 @@ export default function Festas() {
                     <TableRow key={festa.id}>
                       <TableCell className="font-medium">{festa.codigo}</TableCell>
                       <TableCell>{getClienteNome(festa.clienteId)}</TableCell>
+                      <TableCell className="text-muted-foreground">{formatDate(festa.dataFechamento)}</TableCell>
                       <TableCell>{formatDate(festa.dataFesta)}</TableCell>
                       <TableCell>{festa.numeroConvidados}</TableCell>
                       <TableCell>{formatCurrency(festa.valorTotal)}</TableCell>

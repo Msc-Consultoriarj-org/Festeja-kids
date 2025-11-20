@@ -1,0 +1,50 @@
+{
+  "query": "SELECT codigo, dataFechamento, dataFesta, numeroConvidados, valorTotal, valorPago FROM festas LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 48JvJ4xGnzv6z7Y.root --database kipPpydFSSmPdFAif48Epo --execute SELECT codigo, dataFechamento, dataFesta, numeroConvidados, valorTotal, valorPago FROM festas LIMIT 5;",
+  "rows": [
+    {
+      "codigo": "061725TH",
+      "dataFechamento": "2025-06-17 04:00:00",
+      "dataFesta": "2025-11-22 05:00:00",
+      "numeroConvidados": "110",
+      "valorTotal": "529000",
+      "valorPago": "229000"
+    },
+    {
+      "codigo": "081525MA",
+      "dataFechamento": "2025-08-15 04:00:00",
+      "dataFesta": "2025-11-23 05:00:00",
+      "numeroConvidados": "80",
+      "valorTotal": "480000",
+      "valorPago": "50000"
+    },
+    {
+      "codigo": "071025DA",
+      "dataFechamento": "2025-07-10 04:00:00",
+      "dataFesta": "2025-11-28 05:00:00",
+      "numeroConvidados": "110",
+      "valorTotal": "499000",
+      "valorPago": "50000"
+    },
+    {
+      "codigo": "041025LE",
+      "dataFechamento": "2025-04-10 04:00:00",
+      "dataFesta": "2025-11-29 05:00:00",
+      "numeroConvidados": "80",
+      "valorTotal": "480000",
+      "valorPago": "480000"
+    },
+    {
+      "codigo": "071325JE",
+      "dataFechamento": "2025-07-13 04:00:00",
+      "dataFesta": "2025-11-29 05:00:00",
+      "numeroConvidados": "130",
+      "valorTotal": "599000",
+      "valorPago": "50000"
+    }
+  ],
+  "messages": [],
+  "stdout": "codigo\tdataFechamento\tdataFesta\tnumeroConvidados\tvalorTotal\tvalorPago\n061725TH\t2025-06-17 04:00:00\t2025-11-22 05:00:00\t110\t529000\t229000\n081525MA\t2025-08-15 04:00:00\t2025-11-23 05:00:00\t80\t480000\t50000\n071025DA\t2025-07-10 04:00:00\t2025-11-28 05:00:00\t110\t499000\t50000\n041025LE\t2025-04-10 04:00:00\t2025-11-29 05:00:00\t80\t480000\t480000\n071325JE\t2025-07-13 04:00:00\t2025-11-29 05:00:00\t130\t599000\t50000\n",
+  "stderr": "",
+  "execution_time_ms": 49
+}
