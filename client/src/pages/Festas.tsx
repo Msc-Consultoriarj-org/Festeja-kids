@@ -106,6 +106,8 @@ export default function Festas() {
                     <TableHead>Data da Festa</TableHead>
                     <TableHead>Convidados</TableHead>
                     <TableHead>Valor</TableHead>
+                    <TableHead>Pago</TableHead>
+                    <TableHead>Saldo</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Ações</TableHead>
                   </TableRow>
@@ -118,6 +120,8 @@ export default function Festas() {
                       <TableCell>{formatDate(festa.dataFesta)}</TableCell>
                       <TableCell>{festa.numeroConvidados}</TableCell>
                       <TableCell>{formatCurrency(festa.valorTotal)}</TableCell>
+                      <TableCell className="text-green-600">{formatCurrency(festa.valorPago)}</TableCell>
+                      <TableCell className="text-orange-600">{formatCurrency(festa.valorTotal - festa.valorPago)}</TableCell>
                       <TableCell>{getStatusBadge(festa.status)}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">

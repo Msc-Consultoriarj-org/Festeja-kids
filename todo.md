@@ -105,3 +105,11 @@
 - [x] Importar clientes da planilha
 - [x] Importar festas da planilha
 - [x] Validar dados importados
+
+## Importação Completa de Todas as Informações da Planilha
+- [x] Analisar todas as colunas da planilha Próximasfestas.xlsx
+- [x] Adicionar campos de pagamento detalhados (Pagamento 1, 2, 3)
+- [x] Atualizar schema do banco de dados
+- [x] Criar tabela de pagamentos individuais
+- [x] Reimportar dados com todas as informações
+- [x] Atualizar interface para exibir pagamentos
