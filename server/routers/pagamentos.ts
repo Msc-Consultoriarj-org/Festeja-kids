@@ -3,6 +3,10 @@ import { protectedProcedure, router } from "../_core/trpc";
 import * as db from "../db";
 
 export const pagamentosRouter = router({
+  listAll: protectedProcedure.query(async () => {
+    return db.getAllPagamentos();
+  }),
+
   byFesta: protectedProcedure
     .input(z.object({ festaId: z.number() }))
     .query(async ({ input }) => {

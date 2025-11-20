@@ -10,6 +10,9 @@ import NovaFesta from "./pages/NovaFesta";
 import Clientes from "./pages/Clientes";
 import Calendario from "./pages/Calendario";
 import Custos from "./pages/Custos";
+import Agenda from "./pages/Agenda";
+import Financeiro from "./pages/Financeiro";
+import RegistrarPagamento from "./pages/RegistrarPagamento";
 
 function Router() {
   // make sure to consider if you need authentication for certain routes
@@ -21,6 +24,9 @@ function Router() {
       <Route path="/clientes" component={Clientes} />
       <Route path="/calendario" component={Calendario} />
       <Route path="/custos" component={Custos} />
+      <Route path="/agenda" component={Agenda} />
+      <Route path="/financeiro" component={Financeiro} />
+      <Route path="/financeiro/registrar" component={RegistrarPagamento} />
       <Route path={"/404"} component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />

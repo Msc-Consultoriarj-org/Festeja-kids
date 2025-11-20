@@ -178,7 +178,30 @@ export async function getAllFestas() {
   const db = await getDb();
   if (!db) return [];
   const { desc } = await import("drizzle-orm");
-  return db.select().from(festas).orderBy(desc(festas.dataFesta));
+  
+  const result = await db
+    .select({
+      id: festas.id,
+      codigo: festas.codigo,
+      clienteId: festas.clienteId,
+      clienteNome: clientes.nome,
+      dataFechamento: festas.dataFechamento,
+      dataFesta: festas.dataFesta,
+      valorTotal: festas.valorTotal,
+      valorPago: festas.valorPago,
+      numeroConvidados: festas.numeroConvidados,
+      tema: festas.tema,
+      horario: festas.horario,
+      status: festas.status,
+      observacoes: festas.observacoes,
+      createdAt: festas.createdAt,
+      updatedAt: festas.updatedAt,
+    })
+    .from(festas)
+    .leftJoin(clientes, eq(festas.clienteId, clientes.id))
+    .orderBy(desc(festas.dataFesta));
+  
+  return result;
 }
 
 export async function getFestasByStatus(status: "agendada" | "realizada" | "cancelada") {
@@ -232,6 +255,14 @@ export async function createPagamento(pagamento: InsertPagamento) {
   if (!db) throw new Error("Database not available");
   const result = await db.insert(pagamentos).values(pagamento);
   return Number(result[0].insertId);
+}
+
+export async function getAllPagamentos() {
+  const db = await getDb();
+  if (!db) return [];
+  const { desc } = await import("drizzle-orm");
+  return db.select().from(pagamentos)
+    .orderBy(desc(pagamentos.dataPagamento));
 }
 
 export async function getPagamentosByFesta(festaId: number) {
