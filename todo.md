@@ -83,3 +83,10 @@
 - [x] Extrair dados dos contratos de 2026
 - [x] Validar dados extraídos dos PDFs
 - [x] Importar festas futuras no banco de dados
+
+## Validação Cruzada de Dados
+- [x] Analisar planilhas de próximos eventos
+- [x] Comparar dados das planilhas com banco de dados
+- [x] Identificar festas faltantes ou duplicadas
+- [x] Corrigir divergências de valores e datas
+- [x] Sincronizar todos os dados
