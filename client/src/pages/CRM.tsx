@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { trpc } from "@/lib/trpc";
 import { KanbanBoard } from "@/components/crm/KanbanBoard";
 import { Button } from "@/components/ui/button";
-import { Plus, Filter } from "lucide-react";
+import { Plus, Filter, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
