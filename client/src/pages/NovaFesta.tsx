@@ -163,6 +163,7 @@ export default function NovaFesta() {
                       <Label htmlFor="nomeCliente">Nome *</Label>
                       <Input
                         id="nomeCliente"
+                        autoComplete="name"
                         value={novoCliente.nome}
                         onChange={e =>
                           setNovoCliente(prev => ({
@@ -178,6 +179,7 @@ export default function NovaFesta() {
                         <Label htmlFor="telefoneCliente">Telefone *</Label>
                         <Input
                           id="telefoneCliente"
+                          autoComplete="tel"
                           value={novoCliente.telefone}
                           onChange={e =>
                             setNovoCliente(prev => ({
@@ -192,6 +194,7 @@ export default function NovaFesta() {
                         <Label htmlFor="cpfCliente">CPF</Label>
                         <Input
                           id="cpfCliente"
+                          autoComplete="off"
                           value={novoCliente.cpf}
                           onChange={e =>
                             setNovoCliente(prev => ({
@@ -207,6 +210,7 @@ export default function NovaFesta() {
                       <Label htmlFor="enderecoCliente">Endereço</Label>
                       <Input
                         id="enderecoCliente"
+                        autoComplete="street-address"
                         value={novoCliente.endereco}
                         onChange={e =>
                           setNovoCliente(prev => ({

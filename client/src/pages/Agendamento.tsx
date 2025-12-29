@@ -255,6 +255,7 @@ export default function Agendamento() {
                                 <FormControl>
                                   <Input
                                     placeholder="Ex: Maria Silva"
+                                    autoComplete="name"
                                     {...field}
                                     className="rounded-xl"
                                   />
@@ -272,6 +273,7 @@ export default function Agendamento() {
                                 <FormControl>
                                   <Input
                                     placeholder="(21) 99999-9999"
+                                    autoComplete="tel"
                                     {...field}
                                     className="rounded-xl"
                                   />

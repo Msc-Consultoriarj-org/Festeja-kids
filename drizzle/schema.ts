@@ -42,7 +42,16 @@ export const clientes = mysqlTable("clientes", {
   telefone: varchar("telefone", { length: 20 }),
   email: varchar("email", { length: 255 }),
   origem: varchar("origem", { length: 50 }).default("organico"),
-  statusFunil: mysqlEnum("statusFunil", ["novo", "contato", "visita", "proposta", "fechamento", "perdido"]).default("novo").notNull(),
+  statusFunil: mysqlEnum("statusFunil", [
+    "novo",
+    "contato",
+    "visita",
+    "proposta",
+    "fechamento",
+    "perdido",
+  ])
+    .default("novo")
+    .notNull(),
   valorPotencial: int("valorPotencial").default(0),
   observacoes: text("observacoes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

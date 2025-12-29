@@ -112,9 +112,7 @@ Navegue por todas as seções e anote:
 
 -
 -
--
-
----
+- ***
 
 ## 💾 Estrutura de Dados
 
@@ -265,6 +263,6 @@ _(Adicionar screenshot aqui)_
 
 ---
 
-**Data da Análise:** ********\_********
+**Data da Análise:** **\*\*\*\***\_**\*\*\*\***
 
-**Analisado por:** ********\_********
+**Analisado por:** **\*\*\*\***\_**\*\*\*\***
