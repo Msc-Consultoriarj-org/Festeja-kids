@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { router, publicProcedure, protectedProcedure } from "../_core/trpc";
-import { visitas } from "../../drizzle/schema";
-import { eq, and, gte, lte, desc } from "drizzle-orm";
+import { visitas, festas } from "../../drizzle/schema";
+import { eq, and, gte, lte, desc, not } from "drizzle-orm";
 import { getDb } from "../db";
 
 export const visitasRouter = router({
@@ -19,15 +19,27 @@ export const visitasRouter = router({
             if (!db) throw new Error("Database not available");
 
             // Verificar disponibilidade (Regra de negócio simples: não pode haver outra visita no mesmo horário)
-            // TODO: Verificar conflito com festas
-            const existing = await db.select().from(visitas).where(
+            // Verificar conflito com outras visitas
+            const existingVisita = await db.select().from(visitas).where(
                 and(
                     eq(visitas.dataAgendamento, input.dataAgendamento),
                     eq(visitas.status, "agendada")
                 )
             );
 
-            if (existing.length > 0) {
+            if (existingVisita.length > 0) {
+                throw new Error("Horário indisponível");
+            }
+
+            // Verificar conflito com festas
+            const existingFesta = await db.select().from(festas).where(
+                and(
+                    eq(festas.dataFesta, input.dataAgendamento),
+                    not(eq(festas.status, "cancelada"))
+                )
+            );
+
+            if (existingFesta.length > 0) {
                 throw new Error("Horário indisponível");
             }
 
