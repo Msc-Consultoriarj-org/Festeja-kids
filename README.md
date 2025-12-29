@@ -75,15 +75,15 @@ Festeja-kids/
 
 ## 📊 Scripts Disponíveis
 
-| Comando | Descrição |
-|---------|-----------|
-| `pnpm dev` | Servidor de desenvolvimento |
-| `pnpm build` | Build para produção |
-| `pnpm start` | Servidor em produção |
-| `pnpm test` | Executar testes |
-| `pnpm db:push` | Aplicar migrações |
-| `node scripts/check-env.mjs` | Verificar ambiente |
-| `node scripts/init-db.mjs` | Inicializar banco |
+| Comando                      | Descrição                   |
+| ---------------------------- | --------------------------- |
+| `pnpm dev`                   | Servidor de desenvolvimento |
+| `pnpm build`                 | Build para produção         |
+| `pnpm start`                 | Servidor em produção        |
+| `pnpm test`                  | Executar testes             |
+| `pnpm db:push`               | Aplicar migrações           |
+| `node scripts/check-env.mjs` | Verificar ambiente          |
+| `node scripts/init-db.mjs`   | Inicializar banco           |
 
 ## 🔧 Configuração
 
@@ -107,11 +107,13 @@ NODE_ENV=development
 ### Banco de Dados
 
 #### MySQL
+
 ```sql
 CREATE DATABASE festeja_kids CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 #### SQLite
+
 Será criado automaticamente ao executar `pnpm db:push`.
 
 ## 📖 Documentação
@@ -123,19 +125,23 @@ Será criado automaticamente ao executar `pnpm db:push`.
 ## 🐛 Troubleshooting
 
 ### Erro: "DATABASE_URL is required"
+
 - Certifique-se de que o arquivo `.env` existe e contém `DATABASE_URL`
 
 ### Erro: "Cannot connect to MySQL"
+
 - Verifique se o MySQL está rodando
 - Confirme usuário e senha no `.env`
 
 ### Scripts não funcionam
+
 - Use Git Bash ou PowerShell
 - Ou adapte os scripts para Windows (veja SETUP_LOCAL.md)
 
 ## 📞 Suporte
 
 Para problemas ou dúvidas:
+
 1. Consulte [SETUP_LOCAL.md](./SETUP_LOCAL.md)
 2. Verifique [TIMELINE.md](./TIMELINE.md)
 3. Revise os logs do console

@@ -1,7 +1,13 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -20,11 +26,20 @@ import { toast } from "sonner";
 
 export default function Custos() {
   const { user, loading: authLoading } = useAuth();
-  const [novoCustoVariavel, setNovoCustoVariavel] = useState({ descricao: "", valor: "" });
-  const [novoCustoFixo, setNovoCustoFixo] = useState({ descricao: "", valor: "", mesReferencia: "" });
+  const [novoCustoVariavel, setNovoCustoVariavel] = useState({
+    descricao: "",
+    valor: "",
+  });
+  const [novoCustoFixo, setNovoCustoFixo] = useState({
+    descricao: "",
+    valor: "",
+    mesReferencia: "",
+  });
 
-  const { data: custosVariaveis, isLoading: loadingVariaveis } = trpc.custos.variaveis.list.useQuery();
-  const { data: custosFixos, isLoading: loadingFixos } = trpc.custos.fixos.list.useQuery();
+  const { data: custosVariaveis, isLoading: loadingVariaveis } =
+    trpc.custos.variaveis.list.useQuery();
+  const { data: custosFixos, isLoading: loadingFixos } =
+    trpc.custos.fixos.list.useQuery();
 
   const createCustoVariavel = trpc.custos.variaveis.create.useMutation({
     onSuccess: () => {
@@ -50,7 +65,7 @@ export default function Custos() {
     onSuccess: () => {
       toast.success("Custo variável excluído!");
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(`Erro: ${error.message}`);
     },
   });
@@ -70,7 +85,11 @@ export default function Custos() {
       toast.error("Preencha todos os campos");
       return;
     }
-    const valorEmCentavos = Math.round(parseFloat(novoCustoVariavel.valor.replace(/[^\d,]/g, "").replace(",", ".")) * 100);
+    const valorEmCentavos = Math.round(
+      parseFloat(
+        novoCustoVariavel.valor.replace(/[^\d,]/g, "").replace(",", ".")
+      ) * 100
+    );
     createCustoVariavel.mutate({
       descricao: novoCustoVariavel.descricao,
       valor: valorEmCentavos,
@@ -79,14 +98,21 @@ export default function Custos() {
 
   const handleSubmitFixo = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!novoCustoFixo.descricao || !novoCustoFixo.valor || !novoCustoFixo.mesReferencia) {
+    if (
+      !novoCustoFixo.descricao ||
+      !novoCustoFixo.valor ||
+      !novoCustoFixo.mesReferencia
+    ) {
       toast.error("Preencha todos os campos");
       return;
     }
-    const valorEmCentavos = Math.round(parseFloat(novoCustoFixo.valor.replace(/[^\d,]/g, "").replace(",", ".")) * 100);
+    const valorEmCentavos = Math.round(
+      parseFloat(novoCustoFixo.valor.replace(/[^\d,]/g, "").replace(",", ".")) *
+        100
+    );
     const [ano, mes] = novoCustoFixo.mesReferencia.split("-");
     const mesRef = new Date(parseInt(ano), parseInt(mes) - 1, 1).getTime();
-    
+
     createCustoFixo.mutate({
       descricao: novoCustoFixo.descricao,
       valor: valorEmCentavos,
@@ -114,7 +140,9 @@ export default function Custos() {
             <DollarSign className="h-8 w-8" />
             Gestão de Custos
           </h1>
-          <p className="text-muted-foreground">Gerencie os custos variáveis e fixos do negócio</p>
+          <p className="text-muted-foreground">
+            Gerencie os custos variáveis e fixos do negócio
+          </p>
         </div>
 
         <Tabs defaultValue="variaveis" className="space-y-4">
@@ -128,7 +156,9 @@ export default function Custos() {
             <Card>
               <CardHeader>
                 <CardTitle>Novo Custo Variável</CardTitle>
-                <CardDescription>Custos que variam de acordo com cada festa</CardDescription>
+                <CardDescription>
+                  Custos que variam de acordo com cada festa
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmitVariavel} className="space-y-4">
@@ -138,7 +168,12 @@ export default function Custos() {
                       <Input
                         id="descricaoVariavel"
                         value={novoCustoVariavel.descricao}
-                        onChange={(e) => setNovoCustoVariavel(prev => ({ ...prev, descricao: e.target.value }))}
+                        onChange={e =>
+                          setNovoCustoVariavel(prev => ({
+                            ...prev,
+                            descricao: e.target.value,
+                          }))
+                        }
                         placeholder="Ex: Decoração, Buffet, Equipe"
                       />
                     </div>
@@ -147,12 +182,20 @@ export default function Custos() {
                       <Input
                         id="valorVariavel"
                         value={novoCustoVariavel.valor}
-                        onChange={(e) => setNovoCustoVariavel(prev => ({ ...prev, valor: e.target.value }))}
+                        onChange={e =>
+                          setNovoCustoVariavel(prev => ({
+                            ...prev,
+                            valor: e.target.value,
+                          }))
+                        }
                         placeholder="0,00"
                       />
                     </div>
                   </div>
-                  <Button type="submit" disabled={createCustoVariavel.isPending}>
+                  <Button
+                    type="submit"
+                    disabled={createCustoVariavel.isPending}
+                  >
                     {createCustoVariavel.isPending ? (
                       <>
                         <Loader2 className="h-4 w-4 mr-2 animate-spin" />
@@ -192,14 +235,21 @@ export default function Custos() {
                         <TableRow key={custo.id}>
                           <TableCell>{custo.descricao}</TableCell>
                           <TableCell className="text-right font-semibold">
-                            R$ {(custo.valor / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                            R${" "}
+                            {(custo.valor / 100).toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
                           </TableCell>
                           <TableCell>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => {
-                                if (confirm("Deseja realmente excluir este custo?")) {
+                                if (
+                                  confirm(
+                                    "Deseja realmente excluir este custo?"
+                                  )
+                                ) {
                                   deleteCustoVariavel.mutate({ id: custo.id });
                                 }
                               }}
@@ -226,7 +276,9 @@ export default function Custos() {
             <Card>
               <CardHeader>
                 <CardTitle>Novo Custo Fixo</CardTitle>
-                <CardDescription>Custos mensais fixos do negócio</CardDescription>
+                <CardDescription>
+                  Custos mensais fixos do negócio
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmitFixo} className="space-y-4">
@@ -236,7 +288,12 @@ export default function Custos() {
                       <Input
                         id="descricaoFixo"
                         value={novoCustoFixo.descricao}
-                        onChange={(e) => setNovoCustoFixo(prev => ({ ...prev, descricao: e.target.value }))}
+                        onChange={e =>
+                          setNovoCustoFixo(prev => ({
+                            ...prev,
+                            descricao: e.target.value,
+                          }))
+                        }
                         placeholder="Ex: Aluguel, Salários"
                       />
                     </div>
@@ -245,7 +302,12 @@ export default function Custos() {
                       <Input
                         id="valorFixo"
                         value={novoCustoFixo.valor}
-                        onChange={(e) => setNovoCustoFixo(prev => ({ ...prev, valor: e.target.value }))}
+                        onChange={e =>
+                          setNovoCustoFixo(prev => ({
+                            ...prev,
+                            valor: e.target.value,
+                          }))
+                        }
                         placeholder="0,00"
                       />
                     </div>
@@ -255,7 +317,12 @@ export default function Custos() {
                         id="mesReferencia"
                         type="month"
                         value={novoCustoFixo.mesReferencia}
-                        onChange={(e) => setNovoCustoFixo(prev => ({ ...prev, mesReferencia: e.target.value }))}
+                        onChange={e =>
+                          setNovoCustoFixo(prev => ({
+                            ...prev,
+                            mesReferencia: e.target.value,
+                          }))
+                        }
                       />
                     </div>
                   </div>
@@ -300,20 +367,30 @@ export default function Custos() {
                         <TableRow key={custo.id}>
                           <TableCell>{custo.descricao}</TableCell>
                           <TableCell>
-                            {new Date(custo.mesReferencia).toLocaleDateString("pt-BR", { 
-                              month: "long", 
-                              year: "numeric" 
-                            })}
+                            {new Date(custo.mesReferencia).toLocaleDateString(
+                              "pt-BR",
+                              {
+                                month: "long",
+                                year: "numeric",
+                              }
+                            )}
                           </TableCell>
                           <TableCell className="text-right font-semibold">
-                            R$ {(custo.valor / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                            R${" "}
+                            {(custo.valor / 100).toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
                           </TableCell>
                           <TableCell>
                             <Button
                               variant="ghost"
                               size="sm"
                               onClick={() => {
-                                if (confirm("Deseja realmente excluir este custo?")) {
+                                if (
+                                  confirm(
+                                    "Deseja realmente excluir este custo?"
+                                  )
+                                ) {
                                   deleteCustoFixo.mutate({ id: custo.id });
                                 }
                               }}

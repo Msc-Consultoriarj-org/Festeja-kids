@@ -9,7 +9,10 @@ console.log("📊 Importação completa com pagamentos detalhados...\n");
 
 // Ler JSON convertido
 const festasData = JSON.parse(
-  readFileSync("/home/ubuntu/festeja-kids-2/scripts/proximasfestas-complete.json", "utf-8")
+  readFileSync(
+    "/home/ubuntu/festeja-kids-2/scripts/proximasfestas-complete.json",
+    "utf-8"
+  )
 );
 
 console.log(`📋 ${festasData.length} festas para processar\n`);
@@ -22,7 +25,9 @@ for (const festaData of festasData) {
   if (!codigo) continue;
 
   // Buscar festa pelo código
-  const festaResult = await db.select().from(festas)
+  const festaResult = await db
+    .select()
+    .from(festas)
     .where(eq(festas.codigo, codigo))
     .limit(1);
 
@@ -37,7 +42,7 @@ for (const festaData of festasData) {
   const pagamentosArray = [
     { valor: pagamento1, ordem: 1 },
     { valor: pagamento2, ordem: 2 },
-    { valor: pagamento3, ordem: 3 }
+    { valor: pagamento3, ordem: 3 },
   ];
 
   for (const pag of pagamentosArray) {

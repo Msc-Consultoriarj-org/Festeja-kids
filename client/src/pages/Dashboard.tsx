@@ -38,7 +38,8 @@ export default function Dashboard() {
             <CardContent>
               <div className="text-2xl font-bold">{stats?.total || 0}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                {stats?.agendadas || 0} agendadas, {stats?.realizadas || 0} realizadas
+                {stats?.agendadas || 0} agendadas, {stats?.realizadas || 0}{" "}
+                realizadas
               </p>
             </CardContent>
           </Card>
@@ -105,10 +106,18 @@ export default function Dashboard() {
                 Use o menu lateral para navegar pelas funcionalidades:
               </p>
               <ul className="text-sm space-y-1 ml-4 list-disc">
-                <li>Gerencie suas festas em <strong>Festas</strong></li>
-                <li>Cadastre e consulte clientes em <strong>Clientes</strong></li>
-                <li>Controle custos em <strong>Custos</strong></li>
-                <li>Visualize relatórios em <strong>Relatórios</strong></li>
+                <li>
+                  Gerencie suas festas em <strong>Festas</strong>
+                </li>
+                <li>
+                  Cadastre e consulte clientes em <strong>Clientes</strong>
+                </li>
+                <li>
+                  Controle custos em <strong>Custos</strong>
+                </li>
+                <li>
+                  Visualize relatórios em <strong>Relatórios</strong>
+                </li>
               </ul>
             </CardContent>
           </Card>
@@ -119,16 +128,26 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Valor Recebido</span>
-                <span className="font-semibold">{formatCurrency(stats?.valorPago || 0)}</span>
+                <span className="text-sm text-muted-foreground">
+                  Valor Recebido
+                </span>
+                <span className="font-semibold">
+                  {formatCurrency(stats?.valorPago || 0)}
+                </span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm text-muted-foreground">Valor a Receber</span>
-                <span className="font-semibold">{formatCurrency(stats?.valorAReceber || 0)}</span>
+                <span className="text-sm text-muted-foreground">
+                  Valor a Receber
+                </span>
+                <span className="font-semibold">
+                  {formatCurrency(stats?.valorAReceber || 0)}
+                </span>
               </div>
               <div className="flex justify-between items-center pt-2 border-t">
                 <span className="text-sm font-medium">Total</span>
-                <span className="font-bold">{formatCurrency(stats?.valorTotal || 0)}</span>
+                <span className="font-bold">
+                  {formatCurrency(stats?.valorTotal || 0)}
+                </span>
               </div>
             </CardContent>
           </Card>

@@ -29,7 +29,16 @@ export const clientesRouter = router({
         telefone: z.string().optional(),
         email: z.string().email().optional().or(z.literal("")),
         // Campos CRM
-        statusFunil: z.enum(["novo", "contato", "visita", "proposta", "fechamento", "perdido"]).optional(),
+        statusFunil: z
+          .enum([
+            "novo",
+            "contato",
+            "visita",
+            "proposta",
+            "fechamento",
+            "perdido",
+          ])
+          .optional(),
         origem: z.string().optional(),
         valorPotencial: z.number().optional(),
       })
@@ -54,7 +63,16 @@ export const clientesRouter = router({
         telefone: z.string().optional(),
         email: z.string().email().optional().or(z.literal("")),
         // Campos CRM
-        statusFunil: z.enum(["novo", "contato", "visita", "proposta", "fechamento", "perdido"]).optional(),
+        statusFunil: z
+          .enum([
+            "novo",
+            "contato",
+            "visita",
+            "proposta",
+            "fechamento",
+            "perdido",
+          ])
+          .optional(),
         origem: z.string().optional(),
         valorPotencial: z.number().optional(),
       })
@@ -64,21 +82,33 @@ export const clientesRouter = router({
       const updateData: any = {};
 
       if (data.nome !== undefined) updateData.nome = data.nome;
-      if (data.telefone !== undefined) updateData.telefone = data.telefone || null;
+      if (data.telefone !== undefined)
+        updateData.telefone = data.telefone || null;
       if (data.email !== undefined) updateData.email = data.email || null;
-      if (data.statusFunil !== undefined) updateData.statusFunil = data.statusFunil;
+      if (data.statusFunil !== undefined)
+        updateData.statusFunil = data.statusFunil;
       if (data.origem !== undefined) updateData.origem = data.origem;
-      if (data.valorPotencial !== undefined) updateData.valorPotencial = data.valorPotencial;
+      if (data.valorPotencial !== undefined)
+        updateData.valorPotencial = data.valorPotencial;
 
       await db.updateCliente(id, updateData);
       return { success: true };
     }),
 
   updateStatus: protectedProcedure
-    .input(z.object({
-      id: z.number(),
-      statusFunil: z.enum(["novo", "contato", "visita", "proposta", "fechamento", "perdido"]),
-    }))
+    .input(
+      z.object({
+        id: z.number(),
+        statusFunil: z.enum([
+          "novo",
+          "contato",
+          "visita",
+          "proposta",
+          "fechamento",
+          "perdido",
+        ]),
+      })
+    )
     .mutation(async ({ input }) => {
       await db.updateCliente(input.id, { statusFunil: input.statusFunil });
       return { success: true };
@@ -90,7 +120,9 @@ export const clientesRouter = router({
       // Verificar se existem festas associadas
       const festas = await db.getFestasByCliente(input.id);
       if (festas.length > 0) {
-        throw new Error("Não é possível excluir cliente com festas cadastradas");
+        throw new Error(
+          "Não é possível excluir cliente com festas cadastradas"
+        );
       }
 
       await db.deleteCliente(input.id);

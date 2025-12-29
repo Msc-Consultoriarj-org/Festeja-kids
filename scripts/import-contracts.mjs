@@ -9,7 +9,10 @@ console.log("🚀 Iniciando importação de contratos...\n");
 
 // Ler arquivo JSON com contratos extraídos
 const contractsData = JSON.parse(
-  readFileSync("/home/ubuntu/festeja-kids-2/scripts/contratos_extraidos.json", "utf-8")
+  readFileSync(
+    "/home/ubuntu/festeja-kids-2/scripts/contratos_extraidos.json",
+    "utf-8"
+  )
 );
 
 console.log(`📄 ${contractsData.length} contratos para processar\n`);
@@ -20,7 +23,18 @@ let festasAtualizadas = 0;
 const clientesMap = new Map();
 
 for (const contract of contractsData) {
-  const { nome_cliente, cpf, telefone, data_fechamento, data_evento, aniversariante, tema, numero_convidados, horario, valor_total } = contract;
+  const {
+    nome_cliente,
+    cpf,
+    telefone,
+    data_fechamento,
+    data_evento,
+    aniversariante,
+    tema,
+    numero_convidados,
+    horario,
+    valor_total,
+  } = contract;
 
   if (!nome_cliente || !data_evento) {
     console.log(`⚠️  Pulando contrato sem dados mínimos: ${contract.arquivo}`);
@@ -28,14 +42,16 @@ for (const contract of contractsData) {
   }
 
   // Converter datas de DD/MM/YYYY para Date
-  const parseDate = (dateStr) => {
+  const parseDate = dateStr => {
     if (!dateStr) return new Date();
-    const [day, month, year] = dateStr.split('/');
+    const [day, month, year] = dateStr.split("/");
     return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
   };
 
   const dataFestaDate = parseDate(data_evento);
-  const dataFechamentoDate = data_fechamento ? parseDate(data_fechamento) : new Date();
+  const dataFechamentoDate = data_fechamento
+    ? parseDate(data_fechamento)
+    : new Date();
 
   // Verificar se cliente já existe (por nome ou CPF)
   let clienteId = clientesMap.get(nome_cliente);
@@ -43,17 +59,25 @@ for (const contract of contractsData) {
   if (!clienteId) {
     // Buscar no banco por CPF ou nome
     let existingCliente = null;
-    
+
     if (cpf) {
-      const cleanCpf = cpf.replace(/[^\d]/g, '');
-      const result = await db.select().from(clientes).where(eq(clientes.cpf, cleanCpf)).limit(1);
+      const cleanCpf = cpf.replace(/[^\d]/g, "");
+      const result = await db
+        .select()
+        .from(clientes)
+        .where(eq(clientes.cpf, cleanCpf))
+        .limit(1);
       if (result.length > 0) {
         existingCliente = result[0];
       }
     }
-    
+
     if (!existingCliente) {
-      const result = await db.select().from(clientes).where(eq(clientes.nome, nome_cliente)).limit(1);
+      const result = await db
+        .select()
+        .from(clientes)
+        .where(eq(clientes.nome, nome_cliente))
+        .limit(1);
       if (result.length > 0) {
         existingCliente = result[0];
       }
@@ -62,18 +86,21 @@ for (const contract of contractsData) {
     if (existingCliente) {
       clienteId = existingCliente.id;
       clientesMap.set(nome_cliente, clienteId);
-      
+
       // Atualizar telefone e CPF se não existirem
       const updates = {};
       if (telefone && !existingCliente.telefone) {
         updates.telefone = telefone;
       }
       if (cpf && !existingCliente.cpf) {
-        updates.cpf = cpf.replace(/[^\d]/g, '');
+        updates.cpf = cpf.replace(/[^\d]/g, "");
       }
-      
+
       if (Object.keys(updates).length > 0) {
-        await db.update(clientes).set(updates).where(eq(clientes.id, clienteId));
+        await db
+          .update(clientes)
+          .set(updates)
+          .where(eq(clientes.id, clienteId));
       }
     } else {
       // Criar novo cliente
@@ -81,7 +108,7 @@ for (const contract of contractsData) {
         nome: nome_cliente,
         telefone: telefone || null,
         email: null,
-        cpf: cpf ? cpf.replace(/[^\d]/g, '') : null,
+        cpf: cpf ? cpf.replace(/[^\d]/g, "") : null,
         endereco: null,
       });
       clienteId = Number(result[0].insertId);
@@ -94,7 +121,11 @@ for (const contract of contractsData) {
   const day = String(dataFechamentoDate.getDate()).padStart(2, "0");
   const month = String(dataFechamentoDate.getMonth() + 1).padStart(2, "0");
   const year = String(dataFechamentoDate.getFullYear()).slice(-2);
-  const initials = nome_cliente.trim().slice(0, 2).toUpperCase().replace(/[^A-Z]/g, "XX");
+  const initials = nome_cliente
+    .trim()
+    .slice(0, 2)
+    .toUpperCase()
+    .replace(/[^A-Z]/g, "XX");
   let codigo = `${day}${month}${year}${initials}`;
 
   // Adicionar sufixo se código já existe
@@ -102,7 +133,11 @@ for (const contract of contractsData) {
   let codigoOriginal = codigo;
   while (true) {
     try {
-      const existing = await db.select().from(festas).where(eq(festas.codigo, codigo)).limit(1);
+      const existing = await db
+        .select()
+        .from(festas)
+        .where(eq(festas.codigo, codigo))
+        .limit(1);
       if (existing.length === 0) break;
       codigo = `${codigoOriginal}${suffix}`;
       suffix++;
@@ -112,15 +147,19 @@ for (const contract of contractsData) {
   }
 
   // Verificar se festa já existe (por código ou data + cliente)
-  const existingFesta = await db.select().from(festas)
+  const existingFesta = await db
+    .select()
+    .from(festas)
     .where(eq(festas.clienteId, clienteId))
     .limit(100);
-  
+
   const festaExistente = existingFesta.find(f => {
     const fData = new Date(f.dataFesta);
-    return fData.getDate() === dataFestaDate.getDate() &&
-           fData.getMonth() === dataFestaDate.getMonth() &&
-           fData.getFullYear() === dataFestaDate.getFullYear();
+    return (
+      fData.getDate() === dataFestaDate.getDate() &&
+      fData.getMonth() === dataFestaDate.getMonth() &&
+      fData.getFullYear() === dataFestaDate.getFullYear()
+    );
   });
 
   if (festaExistente) {
@@ -137,9 +176,12 @@ for (const contract of contractsData) {
     if (numero_convidados && festaExistente.numeroConvidados === 0) {
       updates.numeroConvidados = numero_convidados;
     }
-    
+
     if (Object.keys(updates).length > 0) {
-      await db.update(festas).set(updates).where(eq(festas.id, festaExistente.id));
+      await db
+        .update(festas)
+        .set(updates)
+        .where(eq(festas.id, festaExistente.id));
       festasAtualizadas++;
       console.log(`✏️  Atualizada: ${nome_cliente} - ${data_evento}`);
     } else {
@@ -159,7 +201,9 @@ for (const contract of contractsData) {
         tema: tema || null,
         horario: horario || null,
         status: dataFestaDate < new Date() ? "realizada" : "agendada",
-        observacoes: aniversariante ? `Aniversariante: ${aniversariante}` : null,
+        observacoes: aniversariante
+          ? `Aniversariante: ${aniversariante}`
+          : null,
       });
       festasImportadas++;
       console.log(`✅ Importada: ${nome_cliente} - ${data_evento}`);

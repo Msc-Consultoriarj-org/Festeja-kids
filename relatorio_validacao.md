@@ -11,16 +11,16 @@ A validação cruzada entre o banco de dados e as planilhas de próximos eventos
 
 ### Números Finais no Sistema
 
-| Métrica | Valor |
-|---------|-------|
-| **Total de Festas** | 173 festas |
-| **Festas Agendadas** | 91 festas |
-| **Festas Realizadas** | 82 festas |
+| Métrica               | Valor         |
+| --------------------- | ------------- |
+| **Total de Festas**   | 173 festas    |
+| **Festas Agendadas**  | 91 festas     |
+| **Festas Realizadas** | 82 festas     |
 | **Faturamento Total** | R$ 883.050,00 |
-| **Valor a Receber** | R$ 408.530,00 |
-| **Valor Recebido** | R$ 474.520,00 |
-| **Ticket Médio** | R$ 5.045,49 |
-| **Total de Clientes** | 166 clientes |
+| **Valor a Receber**   | R$ 408.530,00 |
+| **Valor Recebido**    | R$ 474.520,00 |
+| **Ticket Médio**      | R$ 5.045,49   |
+| **Total de Clientes** | 166 clientes  |
 
 ---
 
@@ -28,41 +28,41 @@ A validação cruzada entre o banco de dados e as planilhas de próximos eventos
 
 ### 1. Fontes de Dados Analisadas
 
-| Fonte | Registros | Festas Únicas |
-|-------|-----------|---------------|
-| **contratos_futuros.json** | 81 registros | 65 festas |
-| **Proximos-eventos.xlsx** | 81 registros | 65 festas |
-| **Próximasfestas.xlsx** | 67 registros | 0 festas novas |
+| Fonte                      | Registros    | Festas Únicas  |
+| -------------------------- | ------------ | -------------- |
+| **contratos_futuros.json** | 81 registros | 65 festas      |
+| **Proximos-eventos.xlsx**  | 81 registros | 65 festas      |
+| **Próximasfestas.xlsx**    | 67 registros | 0 festas novas |
 
 **Observação:** As planilhas JSON e XLSX continham os mesmos dados (duplicatas entre formatos), resultando em 65 festas únicas após consolidação.
 
 ### 2. Comparação com Banco de Dados
 
-| Status | Quantidade | Descrição |
-|--------|------------|-----------|
-| **Festas já no banco** | 13 festas | Dados já cadastrados, sem necessidade de alteração |
-| **Festas atualizadas** | 3 festas | Dados complementados com informações das planilhas |
-| **Festas novas importadas** | 49 festas | Festas que não existiam no banco |
-| **Clientes novos criados** | 48 clientes | Clientes cadastrados durante a importação |
+| Status                      | Quantidade  | Descrição                                          |
+| --------------------------- | ----------- | -------------------------------------------------- |
+| **Festas já no banco**      | 13 festas   | Dados já cadastrados, sem necessidade de alteração |
+| **Festas atualizadas**      | 3 festas    | Dados complementados com informações das planilhas |
+| **Festas novas importadas** | 49 festas   | Festas que não existiam no banco                   |
+| **Clientes novos criados**  | 48 clientes | Clientes cadastrados durante a importação          |
 
 ---
 
 ## 📅 Distribuição das Festas Futuras por Mês
 
-| Mês/Ano | Quantidade | Valor Total |
-|---------|------------|-------------|
-| **Novembro/2025** | 8 festas | R$ 42.350,00 |
-| **Dezembro/2025** | 19 festas | R$ 94.650,00 |
-| **Janeiro/2026** | 9 festas | R$ 47.620,00 |
-| **Fevereiro/2026** | 3 festas | R$ 14.400,00 |
-| **Março/2026** | 9 festas | R$ 47.440,00 |
-| **Abril/2026** | 7 festas | R$ 35.960,00 |
-| **Maio/2026** | 4 festas | R$ 22.070,00 |
-| **Junho/2026** | 2 festas | R$ 9.940,00 |
-| **Julho/2026** | 1 festa | R$ 4.700,00 |
-| **Agosto/2026** | 1 festa | R$ 6.090,00 |
-| **Novembro/2026** | 2 festas | R$ 10.190,00 |
-| **TOTAL** | **65 festas** | **R$ 335.410,00** |
+| Mês/Ano            | Quantidade    | Valor Total       |
+| ------------------ | ------------- | ----------------- |
+| **Novembro/2025**  | 8 festas      | R$ 42.350,00      |
+| **Dezembro/2025**  | 19 festas     | R$ 94.650,00      |
+| **Janeiro/2026**   | 9 festas      | R$ 47.620,00      |
+| **Fevereiro/2026** | 3 festas      | R$ 14.400,00      |
+| **Março/2026**     | 9 festas      | R$ 47.440,00      |
+| **Abril/2026**     | 7 festas      | R$ 35.960,00      |
+| **Maio/2026**      | 4 festas      | R$ 22.070,00      |
+| **Junho/2026**     | 2 festas      | R$ 9.940,00       |
+| **Julho/2026**     | 1 festa       | R$ 4.700,00       |
+| **Agosto/2026**    | 1 festa       | R$ 6.090,00       |
+| **Novembro/2026**  | 2 festas      | R$ 10.190,00      |
+| **TOTAL**          | **65 festas** | **R$ 335.410,00** |
 
 ---
 
@@ -88,6 +88,7 @@ A validação cruzada entre o banco de dados e as planilhas de próximos eventos
 ### Festas Novas Importadas (49)
 
 Todas as 49 festas foram importadas com sucesso, incluindo:
+
 - Dados do cliente (nome, telefone, CPF quando disponível)
 - Data do evento e data de fechamento
 - Valor total da festa
@@ -100,12 +101,12 @@ Todas as 49 festas foram importadas com sucesso, incluindo:
 
 ## 🎯 Estatísticas das Festas Consolidadas
 
-| Métrica | Valor |
-|---------|-------|
+| Métrica                            | Valor         |
+| ---------------------------------- | ------------- |
 | **Valor Total das Festas Futuras** | R$ 335.410,00 |
-| **Ticket Médio** | R$ 5.160,15 |
-| **Total de Convidados** | 6.560 pessoas |
-| **Média de Convidados por Festa** | 101 pessoas |
+| **Ticket Médio**                   | R$ 5.160,15   |
+| **Total de Convidados**            | 6.560 pessoas |
+| **Média de Convidados por Festa**  | 101 pessoas   |
 
 ---
 
@@ -138,11 +139,13 @@ Todas as 49 festas foram importadas com sucesso, incluindo:
 ## 📈 Impacto no Negócio
 
 ### Antes da Sincronização
+
 - 124 festas no sistema
 - R$ 630.720,00 de faturamento total
 - 42 festas agendadas
 
 ### Depois da Sincronização
+
 - **173 festas** no sistema (+49 festas, +39%)
 - **R$ 883.050,00** de faturamento total (+R$ 252.330,00, +40%)
 - **91 festas agendadas** (+49 festas, +117%)
@@ -150,6 +153,7 @@ Todas as 49 festas foram importadas com sucesso, incluindo:
 ### Projeção de Receita
 
 Com as 91 festas agendadas e ticket médio de R$ 5.045,49:
+
 - **Receita Potencial**: R$ 459.139,59
 - **Já Recebido (sinal)**: R$ 408.530,00
 - **A Receber**: R$ 408.530,00
@@ -170,4 +174,4 @@ A validação cruzada foi concluída com sucesso, garantindo a integridade e com
 ---
 
 **Sistema Festeja Kids 2.0**  
-*Gestão Inteligente de Festas Infantis*
+_Gestão Inteligente de Festas Infantis_

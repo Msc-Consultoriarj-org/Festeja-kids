@@ -1,4 +1,12 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import {
+  index,
+  int,
+  mysqlEnum,
+  mysqlTable,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -48,20 +56,58 @@ export type InsertCliente = typeof clientes.$inferInsert;
  */
 export const festas = mysqlTable("festas", {
   id: int("id").autoincrement().primaryKey(),
-  codigo: varchar("codigo", { length: 20 }).notNull().unique(),
-  clienteId: int("clienteId").notNull(),
-  dataFechamento: timestamp("dataFechamento").notNull(),
-  dataFesta: timestamp("dataFesta").notNull(),
-  valorTotal: int("valorTotal").notNull(), // em centavos
-  valorPago: int("valorPago").default(0).notNull(), // em centavos
-  numeroConvidados: int("numeroConvidados").notNull(),
-  tema: varchar("tema", { length: 255 }),
-  horario: varchar("horario", { length: 50 }),
-  status: mysqlEnum("status", ["agendada", "realizada", "cancelada"]).default("agendada").notNull(),
+  nome: varchar("nome", { length: 255 }).notNull(),
+  telefone: varchar("telefone", { length: 20 }),
+  email: varchar("email", { length: 255 }),
+  origem: varchar("origem", { length: 50 }).default("organico"),
+  statusFunil: mysqlEnum("statusFunil", [
+    "novo",
+    "contato",
+    "visita",
+    "proposta",
+    "fechamento",
+    "perdido",
+  ])
+    .default("novo")
+    .notNull(),
+  valorPotencial: int("valorPotencial").default(0),
   observacoes: text("observacoes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
+
+export type Cliente = typeof clientes.$inferSelect;
+export type InsertCliente = typeof clientes.$inferInsert;
+
+/**
+ * Tabela de festas
+ */
+export const festas = mysqlTable(
+  "festas",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    codigo: varchar("codigo", { length: 20 }).notNull().unique(),
+    clienteId: int("clienteId").notNull(),
+    dataFechamento: timestamp("dataFechamento").notNull(),
+    dataFesta: timestamp("dataFesta").notNull(),
+    valorTotal: int("valorTotal").notNull(), // em centavos
+    valorPago: int("valorPago").default(0).notNull(), // em centavos
+    numeroConvidados: int("numeroConvidados").notNull(),
+    tema: varchar("tema", { length: 255 }),
+    horario: varchar("horario", { length: 50 }),
+    status: mysqlEnum("status", ["agendada", "realizada", "cancelada"])
+      .default("agendada")
+      .notNull(),
+    observacoes: text("observacoes"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+    updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+  },
+  table => ({
+    clienteIdIdx: index("clienteId_idx").on(table.clienteId),
+    dataFestaIdx: index("dataFesta_idx").on(table.dataFesta),
+    statusIdx: index("status_idx").on(table.status),
+  })
+);
 
 export type Festa = typeof festas.$inferSelect;
 export type InsertFesta = typeof festas.$inferInsert;
@@ -69,15 +115,21 @@ export type InsertFesta = typeof festas.$inferInsert;
 /**
  * Tabela de pagamentos
  */
-export const pagamentos = mysqlTable("pagamentos", {
-  id: int("id").autoincrement().primaryKey(),
-  festaId: int("festaId").notNull(),
-  valor: int("valor").notNull(), // em centavos
-  dataPagamento: timestamp("dataPagamento").notNull(),
-  metodoPagamento: varchar("metodoPagamento", { length: 50 }),
-  observacoes: text("observacoes"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-});
+export const pagamentos = mysqlTable(
+  "pagamentos",
+  {
+    id: int("id").autoincrement().primaryKey(),
+    festaId: int("festaId").notNull(),
+    valor: int("valor").notNull(), // em centavos
+    dataPagamento: timestamp("dataPagamento").notNull(),
+    metodoPagamento: varchar("metodoPagamento", { length: 50 }),
+    observacoes: text("observacoes"),
+    createdAt: timestamp("createdAt").defaultNow().notNull(),
+  },
+  table => ({
+    festaIdIdx: index("festaId_idx").on(table.festaId),
+  })
+);
 
 export type Pagamento = typeof pagamentos.$inferSelect;
 export type InsertPagamento = typeof pagamentos.$inferInsert;
@@ -125,7 +177,9 @@ export const visitas = mysqlTable("visitas", {
   clienteTelefone: varchar("clienteTelefone", { length: 20 }).notNull(),
   dataAgendamento: timestamp("dataAgendamento").notNull(),
   tipoEvento: varchar("tipoEvento", { length: 100 }), // Ex: Aniversário 1 ano, Casamento
-  status: mysqlEnum("status", ["agendada", "realizada", "cancelada", "noshow"]).default("agendada").notNull(),
+  status: mysqlEnum("status", ["agendada", "realizada", "cancelada", "noshow"])
+    .default("agendada")
+    .notNull(),
   observacoes: text("observacoes"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

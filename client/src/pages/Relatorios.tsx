@@ -1,6 +1,12 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -29,45 +35,73 @@ import {
   Cell,
 } from "recharts";
 
-const COLORS = ["#10b981", "#3b82f6", "#f59e0b", "#8b5cf6", "#ec4899", "#f97316"];
+const COLORS = [
+  "#10b981",
+  "#3b82f6",
+  "#f59e0b",
+  "#8b5cf6",
+  "#ec4899",
+  "#f97316",
+];
 
 export default function Relatorios() {
   const { user, loading: authLoading } = useAuth();
-  const [periodoSelecionado, setPeriodoSelecionado] = useState<"mensal" | "trimestral" | "anual">("mensal");
-  const { data: festas, isLoading: loadingFestas } = trpc.festas.list.useQuery();
-  const { data: pagamentos, isLoading: loadingPagamentos } = trpc.pagamentos.listAll.useQuery();
-  const { data: custosVariaveis, isLoading: loadingCustosVar } = trpc.custos.variaveis.list.useQuery();
-  const { data: custosFixos, isLoading: loadingCustosFixos } = trpc.custos.fixos.list.useQuery();
+  const [periodoSelecionado, setPeriodoSelecionado] = useState<
+    "mensal" | "trimestral" | "anual"
+  >("mensal");
+  const { data: festas, isLoading: loadingFestas } =
+    trpc.festas.list.useQuery();
+  const { data: pagamentos, isLoading: loadingPagamentos } =
+    trpc.pagamentos.listAll.useQuery();
+  const { data: custosVariaveis, isLoading: loadingCustosVar } =
+    trpc.custos.variaveis.list.useQuery();
+  const { data: custosFixos, isLoading: loadingCustosFixos } =
+    trpc.custos.fixos.list.useQuery();
 
   const dadosRelatorio = useMemo(() => {
     if (!festas || !pagamentos) return null;
 
     // Análise Mensal
-    const dadosMensais: Record<string, {
-      mes: string,
-      festas: number,
-      faturamento: number,
-      recebido: number,
-      ticketMedio: number,
-    }> = {};
+    const dadosMensais: Record<
+      string,
+      {
+        mes: string;
+        festas: number;
+        faturamento: number;
+        recebido: number;
+        ticketMedio: number;
+      }
+    > = {};
 
-    festas.forEach((f) => {
-      const mes = new Date(f.dataFesta).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+    festas.forEach(f => {
+      const mes = new Date(f.dataFesta).toLocaleDateString("pt-BR", {
+        month: "long",
+        year: "numeric",
+      });
       if (!dadosMensais[mes]) {
-        dadosMensais[mes] = { mes, festas: 0, faturamento: 0, recebido: 0, ticketMedio: 0 };
+        dadosMensais[mes] = {
+          mes,
+          festas: 0,
+          faturamento: 0,
+          recebido: 0,
+          ticketMedio: 0,
+        };
       }
       dadosMensais[mes].festas++;
       dadosMensais[mes].faturamento += f.valorTotal;
     });
 
-    pagamentos.forEach((p) => {
-      const mes = new Date(p.dataPagamento).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+    pagamentos.forEach(p => {
+      const mes = new Date(p.dataPagamento).toLocaleDateString("pt-BR", {
+        month: "long",
+        year: "numeric",
+      });
       if (dadosMensais[mes]) {
         dadosMensais[mes].recebido += p.valor;
       }
     });
 
-    Object.values(dadosMensais).forEach((d) => {
+    Object.values(dadosMensais).forEach(d => {
       d.ticketMedio = d.festas > 0 ? d.faturamento / d.festas : 0;
     });
 
@@ -78,7 +112,7 @@ export default function Relatorios() {
         return dateA.getTime() - dateB.getTime();
       })
       .slice(-12) // Últimos 12 meses
-      .map((d) => ({
+      .map(d => ({
         mes: d.mes.split(" de ")[0].substring(0, 3),
         festas: d.festas,
         faturamento: d.faturamento / 100,
@@ -87,32 +121,40 @@ export default function Relatorios() {
       }));
 
     // Análise Trimestral
-    const dadosTrimestrais: Record<string, {
-      trimestre: string,
-      festas: number,
-      faturamento: number,
-      recebido: number,
-    }> = {};
+    const dadosTrimestrais: Record<
+      string,
+      {
+        trimestre: string;
+        festas: number;
+        faturamento: number;
+        recebido: number;
+      }
+    > = {};
 
-    festas.forEach((f) => {
+    festas.forEach(f => {
       const data = new Date(f.dataFesta);
       const ano = data.getFullYear();
       const trimestre = Math.floor(data.getMonth() / 3) + 1;
       const chave = `${ano} Q${trimestre}`;
-      
+
       if (!dadosTrimestrais[chave]) {
-        dadosTrimestrais[chave] = { trimestre: chave, festas: 0, faturamento: 0, recebido: 0 };
+        dadosTrimestrais[chave] = {
+          trimestre: chave,
+          festas: 0,
+          faturamento: 0,
+          recebido: 0,
+        };
       }
       dadosTrimestrais[chave].festas++;
       dadosTrimestrais[chave].faturamento += f.valorTotal;
     });
 
-    pagamentos.forEach((p) => {
+    pagamentos.forEach(p => {
       const data = new Date(p.dataPagamento);
       const ano = data.getFullYear();
       const trimestre = Math.floor(data.getMonth() / 3) + 1;
       const chave = `${ano} Q${trimestre}`;
-      
+
       if (dadosTrimestrais[chave]) {
         dadosTrimestrais[chave].recebido += p.valor;
       }
@@ -121,7 +163,7 @@ export default function Relatorios() {
     const graficoTrimestral = Object.values(dadosTrimestrais)
       .sort((a, b) => a.trimestre.localeCompare(b.trimestre))
       .slice(-8) // Últimos 8 trimestres
-      .map((d) => ({
+      .map(d => ({
         trimestre: d.trimestre,
         festas: d.festas,
         faturamento: d.faturamento / 100,
@@ -129,14 +171,17 @@ export default function Relatorios() {
       }));
 
     // Análise Anual
-    const dadosAnuais: Record<number, {
-      ano: number,
-      festas: number,
-      faturamento: number,
-      recebido: number,
-    }> = {};
+    const dadosAnuais: Record<
+      number,
+      {
+        ano: number;
+        festas: number;
+        faturamento: number;
+        recebido: number;
+      }
+    > = {};
 
-    festas.forEach((f) => {
+    festas.forEach(f => {
       const ano = new Date(f.dataFesta).getFullYear();
       if (!dadosAnuais[ano]) {
         dadosAnuais[ano] = { ano, festas: 0, faturamento: 0, recebido: 0 };
@@ -145,7 +190,7 @@ export default function Relatorios() {
       dadosAnuais[ano].faturamento += f.valorTotal;
     });
 
-    pagamentos.forEach((p) => {
+    pagamentos.forEach(p => {
       const ano = new Date(p.dataPagamento).getFullYear();
       if (dadosAnuais[ano]) {
         dadosAnuais[ano].recebido += p.valor;
@@ -154,7 +199,7 @@ export default function Relatorios() {
 
     const graficoAnual = Object.values(dadosAnuais)
       .sort((a, b) => a.ano - b.ano)
-      .map((d) => ({
+      .map(d => ({
         ano: d.ano.toString(),
         festas: d.festas,
         faturamento: d.faturamento / 100,
@@ -162,8 +207,10 @@ export default function Relatorios() {
       }));
 
     // Análise de Custos
-    const totalCustosVariaveis = custosVariaveis?.reduce((sum: number, c: any) => sum + c.valor, 0) || 0;
-    const totalCustosFixos = custosFixos?.reduce((sum: number, c: any) => sum + c.valor, 0) || 0;
+    const totalCustosVariaveis =
+      custosVariaveis?.reduce((sum: number, c: any) => sum + c.valor, 0) || 0;
+    const totalCustosFixos =
+      custosFixos?.reduce((sum: number, c: any) => sum + c.valor, 0) || 0;
     const totalCustos = totalCustosVariaveis + totalCustosFixos;
     const totalReceita = festas.reduce((sum, f) => sum + f.valorTotal, 0);
     const lucro = totalReceita - totalCustos;
@@ -199,7 +246,11 @@ export default function Relatorios() {
     return null;
   }
 
-  const isLoading = loadingFestas || loadingPagamentos || loadingCustosVar || loadingCustosFixos;
+  const isLoading =
+    loadingFestas ||
+    loadingPagamentos ||
+    loadingCustosVar ||
+    loadingCustosFixos;
 
   return (
     <DashboardLayout>
@@ -210,9 +261,16 @@ export default function Relatorios() {
               <BarChart3 className="h-8 w-8" />
               Relatórios
             </h1>
-            <p className="text-muted-foreground">Análises e dashboards visuais do negócio</p>
+            <p className="text-muted-foreground">
+              Análises e dashboards visuais do negócio
+            </p>
           </div>
-          <Select value={periodoSelecionado} onValueChange={(v) => setPeriodoSelecionado(v as typeof periodoSelecionado)}>
+          <Select
+            value={periodoSelecionado}
+            onValueChange={v =>
+              setPeriodoSelecionado(v as typeof periodoSelecionado)
+            }
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Selecione o período" />
             </SelectTrigger>
@@ -234,22 +292,34 @@ export default function Relatorios() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium">Receita Total</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    Receita Total
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    R$ {(dadosRelatorio.totalReceita / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                    R${" "}
+                    {(dadosRelatorio.totalReceita / 100).toLocaleString(
+                      "pt-BR",
+                      { minimumFractionDigits: 2 }
+                    )}
                   </div>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium">Custos Totais</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    Custos Totais
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-orange-600">
-                    R$ {(dadosRelatorio.totalCustos / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                    R${" "}
+                    {(dadosRelatorio.totalCustos / 100).toLocaleString(
+                      "pt-BR",
+                      { minimumFractionDigits: 2 }
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -259,18 +329,27 @@ export default function Relatorios() {
                   <CardTitle className="text-sm font-medium">Lucro</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className={`text-2xl font-bold ${dadosRelatorio.lucro >= 0 ? "text-green-600" : "text-red-600"}`}>
-                    R$ {(dadosRelatorio.lucro / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  <div
+                    className={`text-2xl font-bold ${dadosRelatorio.lucro >= 0 ? "text-green-600" : "text-red-600"}`}
+                  >
+                    R${" "}
+                    {(dadosRelatorio.lucro / 100).toLocaleString("pt-BR", {
+                      minimumFractionDigits: 2,
+                    })}
                   </div>
                 </CardContent>
               </Card>
 
               <Card>
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium">Margem de Lucro</CardTitle>
+                  <CardTitle className="text-sm font-medium">
+                    Margem de Lucro
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className={`text-2xl font-bold ${dadosRelatorio.margemLucro >= 0 ? "text-green-600" : "text-red-600"}`}>
+                  <div
+                    className={`text-2xl font-bold ${dadosRelatorio.margemLucro >= 0 ? "text-green-600" : "text-red-600"}`}
+                  >
                     {dadosRelatorio.margemLucro.toFixed(1)}%
                   </div>
                 </CardContent>
@@ -282,8 +361,12 @@ export default function Relatorios() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <Card className="lg:col-span-2">
                   <CardHeader>
-                    <CardTitle>Análise Mensal - Faturamento vs Recebido</CardTitle>
-                    <CardDescription>Comparação de valores faturados e recebidos por mês</CardDescription>
+                    <CardTitle>
+                      Análise Mensal - Faturamento vs Recebido
+                    </CardTitle>
+                    <CardDescription>
+                      Comparação de valores faturados e recebidos por mês
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <ResponsiveContainer width="100%" height={350}>
@@ -292,9 +375,14 @@ export default function Relatorios() {
                         <XAxis dataKey="mes" stroke="#9ca3af" />
                         <YAxis stroke="#9ca3af" />
                         <Tooltip
-                          contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151" }}
+                          contentStyle={{
+                            backgroundColor: "#1f2937",
+                            border: "1px solid #374151",
+                          }}
                           labelStyle={{ color: "#f3f4f6" }}
-                          formatter={(value: number) => `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`}
+                          formatter={(value: number) =>
+                            `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
+                          }
                         />
                         <Legend />
                         <Area
@@ -323,7 +411,9 @@ export default function Relatorios() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Quantidade de Festas por Mês</CardTitle>
-                    <CardDescription>Evolução do número de festas realizadas</CardDescription>
+                    <CardDescription>
+                      Evolução do número de festas realizadas
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <ResponsiveContainer width="100%" height={300}>
@@ -332,7 +422,10 @@ export default function Relatorios() {
                         <XAxis dataKey="mes" stroke="#9ca3af" />
                         <YAxis stroke="#9ca3af" />
                         <Tooltip
-                          contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151" }}
+                          contentStyle={{
+                            backgroundColor: "#1f2937",
+                            border: "1px solid #374151",
+                          }}
                           labelStyle={{ color: "#f3f4f6" }}
                         />
                         <Legend />
@@ -345,7 +438,9 @@ export default function Relatorios() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Ticket Médio por Mês</CardTitle>
-                    <CardDescription>Valor médio por festa ao longo do tempo</CardDescription>
+                    <CardDescription>
+                      Valor médio por festa ao longo do tempo
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <ResponsiveContainer width="100%" height={300}>
@@ -354,9 +449,14 @@ export default function Relatorios() {
                         <XAxis dataKey="mes" stroke="#9ca3af" />
                         <YAxis stroke="#9ca3af" />
                         <Tooltip
-                          contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151" }}
+                          contentStyle={{
+                            backgroundColor: "#1f2937",
+                            border: "1px solid #374151",
+                          }}
                           labelStyle={{ color: "#f3f4f6" }}
-                          formatter={(value: number) => `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`}
+                          formatter={(value: number) =>
+                            `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
+                          }
                         />
                         <Legend />
                         <Line
@@ -387,7 +487,10 @@ export default function Relatorios() {
                       <XAxis dataKey="trimestre" stroke="#9ca3af" />
                       <YAxis stroke="#9ca3af" />
                       <Tooltip
-                        contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151" }}
+                        contentStyle={{
+                          backgroundColor: "#1f2937",
+                          border: "1px solid #374151",
+                        }}
                         labelStyle={{ color: "#f3f4f6" }}
                         formatter={(value: number, name: string) => {
                           if (name === "festas") return value;
@@ -395,7 +498,11 @@ export default function Relatorios() {
                         }}
                       />
                       <Legend />
-                      <Bar dataKey="faturamento" fill="#3b82f6" name="Faturamento" />
+                      <Bar
+                        dataKey="faturamento"
+                        fill="#3b82f6"
+                        name="Faturamento"
+                      />
                       <Bar dataKey="recebido" fill="#10b981" name="Recebido" />
                       <Bar dataKey="festas" fill="#8b5cf6" name="Festas" />
                     </BarChart>
@@ -417,7 +524,10 @@ export default function Relatorios() {
                       <XAxis dataKey="ano" stroke="#9ca3af" />
                       <YAxis stroke="#9ca3af" />
                       <Tooltip
-                        contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151" }}
+                        contentStyle={{
+                          backgroundColor: "#1f2937",
+                          border: "1px solid #374151",
+                        }}
                         labelStyle={{ color: "#f3f4f6" }}
                         formatter={(value: number, name: string) => {
                           if (name === "festas") return value;
@@ -425,7 +535,11 @@ export default function Relatorios() {
                         }}
                       />
                       <Legend />
-                      <Bar dataKey="faturamento" fill="#3b82f6" name="Faturamento" />
+                      <Bar
+                        dataKey="faturamento"
+                        fill="#3b82f6"
+                        name="Faturamento"
+                      />
                       <Bar dataKey="recebido" fill="#10b981" name="Recebido" />
                       <Bar dataKey="festas" fill="#8b5cf6" name="Festas" />
                     </BarChart>
@@ -438,7 +552,9 @@ export default function Relatorios() {
             <Card>
               <CardHeader>
                 <CardTitle>Análise de Custos vs Receita</CardTitle>
-                <CardDescription>Distribuição de receita, custos e lucro</CardDescription>
+                <CardDescription>
+                  Distribuição de receita, custos e lucro
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={400}>
@@ -448,18 +564,28 @@ export default function Relatorios() {
                       cx="50%"
                       cy="50%"
                       labelLine={true}
-                      label={({ name, value }) => `${name}: R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`}
+                      label={({ name, value }) =>
+                        `${name}: R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
+                      }
                       outerRadius={120}
                       fill="#8884d8"
                       dataKey="value"
                     >
                       {dadosRelatorio.dadosCustosReceita.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
                       ))}
                     </Pie>
                     <Tooltip
-                      contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151" }}
-                      formatter={(value: number) => `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`}
+                      contentStyle={{
+                        backgroundColor: "#1f2937",
+                        border: "1px solid #374151",
+                      }}
+                      formatter={(value: number) =>
+                        `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
+                      }
                     />
                   </PieChart>
                 </ResponsiveContainer>

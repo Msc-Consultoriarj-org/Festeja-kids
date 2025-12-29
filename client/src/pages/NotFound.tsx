@@ -23,9 +23,7 @@ export default function NotFound() {
 
           <h1 className="text-4xl font-bold mb-2">404</h1>
 
-          <h2 className="text-xl font-semibold mb-4">
-            Página Não Encontrada
-          </h2>
+          <h2 className="text-xl font-semibold mb-4">Página Não Encontrada</h2>
 
           <p className="text-muted-foreground mb-8 leading-relaxed">
             Desculpe, a página que você está procurando não existe.
@@ -37,10 +35,7 @@ export default function NotFound() {
             id="not-found-button-group"
             className="flex flex-col sm:flex-row gap-3 justify-center"
           >
-            <Button
-              onClick={handleGoHome}
-              className="px-6 py-2.5"
-            >
+            <Button onClick={handleGoHome} className="px-6 py-2.5">
               <Home className="w-4 h-4 mr-2" />
               Voltar ao Início
             </Button>

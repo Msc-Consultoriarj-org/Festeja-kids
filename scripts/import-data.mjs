@@ -1,5 +1,10 @@
 import { drizzle } from "drizzle-orm/mysql2";
-import { clientes, festas, custosVariaveis, custosFixos } from "../drizzle/schema.js";
+import {
+  clientes,
+  festas,
+  custosVariaveis,
+  custosFixos,
+} from "../drizzle/schema.js";
 import XLSX from "xlsx";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
@@ -95,7 +100,7 @@ for (const row of data2025) {
 
   // Verificar se cliente já existe
   let clienteId = clientesMap.get(nomeCliente);
-  
+
   if (!clienteId) {
     // Criar novo cliente
     const result = await db.insert(clientes).values({
@@ -109,32 +114,46 @@ for (const row of data2025) {
   }
 
   // Converter datas do Excel (serial number) para Date
-  const excelDateToJSDate = (serial) => {
-    if (!serial || typeof serial !== 'number') return new Date();
+  const excelDateToJSDate = serial => {
+    if (!serial || typeof serial !== "number") return new Date();
     const utc_days = Math.floor(serial - 25569);
     const utc_value = utc_days * 86400;
     const date_info = new Date(utc_value * 1000);
-    return new Date(date_info.getFullYear(), date_info.getMonth(), date_info.getDate());
+    return new Date(
+      date_info.getFullYear(),
+      date_info.getMonth(),
+      date_info.getDate()
+    );
   };
 
   const dataFestaDate = excelDateToJSDate(dataFesta);
-  const dataFechamentoDate = dataFechamento ? excelDateToJSDate(dataFechamento) : new Date();
+  const dataFechamentoDate = dataFechamento
+    ? excelDateToJSDate(dataFechamento)
+    : new Date();
 
   // Gerar código do contrato
   const day = String(dataFechamentoDate.getDate()).padStart(2, "0");
   const month = String(dataFechamentoDate.getMonth() + 1).padStart(2, "0");
   const year = String(dataFechamentoDate.getFullYear()).slice(-2);
-  const initials = nomeCliente.trim().slice(0, 2).toUpperCase().replace(/[^A-Z]/g, "XX");
+  const initials = nomeCliente
+    .trim()
+    .slice(0, 2)
+    .toUpperCase()
+    .replace(/[^A-Z]/g, "XX");
   let codigo = `${day}${month}${year}${initials}`;
-  
+
   // Adicionar sufixo se código já existe
   let suffix = 1;
   let codigoOriginal = codigo;
   const { eq } = await import("drizzle-orm");
-  
+
   while (true) {
     try {
-      const existing = await db.select().from(festas).where(eq(festas.codigo, codigo)).limit(1);
+      const existing = await db
+        .select()
+        .from(festas)
+        .where(eq(festas.codigo, codigo))
+        .limit(1);
       if (existing.length === 0) break;
       codigo = `${codigoOriginal}${suffix}`;
       suffix++;

@@ -6,13 +6,13 @@ if (!connectionString) {
 }
 
 // Detectar se é SQLite ou MySQL
-const isSQLite = connectionString.startsWith('file:');
+const isSQLite = connectionString.startsWith("file:");
 
 export default defineConfig({
   schema: "./drizzle/schema.ts",
   out: "./drizzle",
   dialect: isSQLite ? "sqlite" : "mysql",
   dbCredentials: isSQLite
-    ? { url: connectionString.replace('file:', '') }
+    ? { url: connectionString.replace("file:", "") }
     : { url: connectionString },
 });

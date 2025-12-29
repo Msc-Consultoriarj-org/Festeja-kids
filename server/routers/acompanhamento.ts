@@ -11,15 +11,15 @@ export const acompanhamentoRouter = router({
   listarComStatus: protectedProcedure.query(async () => {
     const festas = await getAllFestas();
     const database = await getDb();
-    
+
     if (!database) {
       throw new Error("Database not available");
     }
 
     const agora = new Date();
-    
+
     const festasComStatus = await Promise.all(
-      festas.map(async (festa) => {
+      festas.map(async festa => {
         // Buscar pagamentos da festa
         const pagamentosFesta = await database
           .select()
@@ -30,21 +30,34 @@ export const acompanhamentoRouter = router({
         const saldo = festa.valorTotal - totalPago;
         const dataFesta = new Date(festa.dataFesta);
         const dataLimiteQuitacao = new Date(dataFesta);
-        dataLimiteQuitacao.setDate(dataLimiteQuitacao.getDate() - DIAS_ANTECEDENCIA_QUITACAO);
+        dataLimiteQuitacao.setDate(
+          dataLimiteQuitacao.getDate() - DIAS_ANTECEDENCIA_QUITACAO
+        );
 
         // Calcular meses desde o fechamento
         const dataFechamento = new Date(festa.dataFechamento);
         const mesesDecorridos = Math.floor(
-          (agora.getTime() - dataFechamento.getTime()) / (1000 * 60 * 60 * 24 * 30)
+          (agora.getTime() - dataFechamento.getTime()) /
+            (1000 * 60 * 60 * 24 * 30)
         );
 
         // Calcular valor mínimo esperado (R$ 500/mês)
-        const valorMinimoEsperado = Math.max(0, mesesDecorridos * PARCELA_MINIMA);
-        
+        const valorMinimoEsperado = Math.max(
+          0,
+          mesesDecorridos * PARCELA_MINIMA
+        );
+
         // Determinar status
-        let status: "quitado" | "em_dia" | "atrasado" | "alerta_quitacao" | "nao_quitado";
-        let diasParaEvento = Math.floor((dataFesta.getTime() - agora.getTime()) / (1000 * 60 * 60 * 24));
-        
+        let status:
+          | "quitado"
+          | "em_dia"
+          | "atrasado"
+          | "alerta_quitacao"
+          | "nao_quitado";
+        let diasParaEvento = Math.floor(
+          (dataFesta.getTime() - agora.getTime()) / (1000 * 60 * 60 * 24)
+        );
+
         if (saldo <= 0) {
           status = "quitado";
         } else if (agora >= dataLimiteQuitacao) {
@@ -59,7 +72,9 @@ export const acompanhamentoRouter = router({
 
         // Calcular próxima parcela esperada
         const proximaParcelaData = new Date(dataFechamento);
-        proximaParcelaData.setMonth(proximaParcelaData.getMonth() + mesesDecorridos + 1);
+        proximaParcelaData.setMonth(
+          proximaParcelaData.getMonth() + mesesDecorridos + 1
+        );
 
         return {
           ...festa,
@@ -88,24 +103,30 @@ export const acompanhamentoRouter = router({
   projecaoRecebimentos: protectedProcedure.query(async () => {
     const festas = await getAllFestas();
     const database = await getDb();
-    
+
     if (!database) {
       throw new Error("Database not available");
     }
 
     const agora = new Date();
-    const projecao: Record<string, {
-      mes: string,
-      recebimentoEsperado: number,
-      recebimentoRealizado: number,
-      festasAQuitar: number,
-    }> = {};
+    const projecao: Record<
+      string,
+      {
+        mes: string;
+        recebimentoEsperado: number;
+        recebimentoRealizado: number;
+        festasAQuitar: number;
+      }
+    > = {};
 
     // Inicializar próximos 12 meses
     for (let i = 0; i < 12; i++) {
       const data = new Date(agora);
       data.setMonth(data.getMonth() + i);
-      const chave = data.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+      const chave = data.toLocaleDateString("pt-BR", {
+        month: "long",
+        year: "numeric",
+      });
       projecao[chave] = {
         mes: chave,
         recebimentoEsperado: 0,
@@ -129,21 +150,33 @@ export const acompanhamentoRouter = router({
       const dataFesta = new Date(festa.dataFesta);
       const dataFechamento = new Date(festa.dataFechamento);
       const dataLimiteQuitacao = new Date(dataFesta);
-      dataLimiteQuitacao.setDate(dataLimiteQuitacao.getDate() - DIAS_ANTECEDENCIA_QUITACAO);
+      dataLimiteQuitacao.setDate(
+        dataLimiteQuitacao.getDate() - DIAS_ANTECEDENCIA_QUITACAO
+      );
 
       // Calcular meses até a quitação
-      const mesesAteQuitacao = Math.max(1, Math.ceil(
-        (dataLimiteQuitacao.getTime() - agora.getTime()) / (1000 * 60 * 60 * 24 * 30)
-      ));
+      const mesesAteQuitacao = Math.max(
+        1,
+        Math.ceil(
+          (dataLimiteQuitacao.getTime() - agora.getTime()) /
+            (1000 * 60 * 60 * 24 * 30)
+        )
+      );
 
       // Distribuir saldo restante nos próximos meses (mínimo R$ 500/mês)
-      const parcelaMensal = Math.max(PARCELA_MINIMA, Math.ceil(saldo / mesesAteQuitacao));
+      const parcelaMensal = Math.max(
+        PARCELA_MINIMA,
+        Math.ceil(saldo / mesesAteQuitacao)
+      );
 
       let saldoRestante = saldo;
       for (let i = 0; i < mesesAteQuitacao && saldoRestante > 0; i++) {
         const data = new Date(agora);
         data.setMonth(data.getMonth() + i);
-        const chave = data.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+        const chave = data.toLocaleDateString("pt-BR", {
+          month: "long",
+          year: "numeric",
+        });
 
         if (projecao[chave]) {
           const valorParcela = Math.min(parcelaMensal, saldoRestante);
@@ -155,17 +188,23 @@ export const acompanhamentoRouter = router({
           const proximoMes = new Date(mesData);
           proximoMes.setMonth(proximoMes.getMonth() + 1);
 
-          if (dataLimiteQuitacao >= mesData && dataLimiteQuitacao < proximoMes) {
+          if (
+            dataLimiteQuitacao >= mesData &&
+            dataLimiteQuitacao < proximoMes
+          ) {
             projecao[chave].festasAQuitar++;
           }
         }
       }
 
       // Adicionar pagamentos já realizados
-      pagamentosFesta.forEach((p) => {
+      pagamentosFesta.forEach(p => {
         const dataPagamento = new Date(p.dataPagamento);
         if (dataPagamento >= agora) {
-          const chave = dataPagamento.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+          const chave = dataPagamento.toLocaleDateString("pt-BR", {
+            month: "long",
+            year: "numeric",
+          });
           if (projecao[chave]) {
             projecao[chave].recebimentoRealizado += p.valor;
           }

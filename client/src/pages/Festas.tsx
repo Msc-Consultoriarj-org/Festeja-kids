@@ -46,7 +46,7 @@ export default function Festas() {
   });
 
   const getClienteNome = (clienteId: number) => {
-    const cliente = clientes?.find((c) => c.id === clienteId);
+    const cliente = clientes?.find(c => c.id === clienteId);
     return cliente?.nome || "Cliente não encontrado";
   };
 
@@ -126,16 +126,24 @@ export default function Festas() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {festasFiltradas.map((festa) => (
+                  {festasFiltradas.map(festa => (
                     <TableRow key={festa.id}>
-                      <TableCell className="font-medium">{festa.codigo}</TableCell>
+                      <TableCell className="font-medium">
+                        {festa.codigo}
+                      </TableCell>
                       <TableCell>{getClienteNome(festa.clienteId)}</TableCell>
-                      <TableCell className="text-muted-foreground">{formatDate(festa.dataFechamento)}</TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {formatDate(festa.dataFechamento)}
+                      </TableCell>
                       <TableCell>{formatDate(festa.dataFesta)}</TableCell>
                       <TableCell>{festa.numeroConvidados}</TableCell>
                       <TableCell>{formatCurrency(festa.valorTotal)}</TableCell>
-                      <TableCell className="text-green-600">{formatCurrency(festa.valorPago)}</TableCell>
-                      <TableCell className="text-orange-600">{formatCurrency(festa.valorTotal - festa.valorPago)}</TableCell>
+                      <TableCell className="text-green-600">
+                        {formatCurrency(festa.valorPago)}
+                      </TableCell>
+                      <TableCell className="text-orange-600">
+                        {formatCurrency(festa.valorTotal - festa.valorPago)}
+                      </TableCell>
                       <TableCell>{getStatusBadge(festa.status)}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">

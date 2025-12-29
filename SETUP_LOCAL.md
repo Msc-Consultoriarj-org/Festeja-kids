@@ -62,6 +62,7 @@ NODE_ENV=development
 ```
 
 > **💡 Dica:** Para gerar uma chave JWT segura, você pode usar:
+>
 > ```powershell
 > node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 > ```
@@ -71,11 +72,13 @@ NODE_ENV=development
 #### Se estiver usando MySQL:
 
 1. Crie o banco de dados:
+
 ```sql
 CREATE DATABASE festeja_kids CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 2. Execute as migrações:
+
 ```powershell
 pnpm db:push
 ```
@@ -83,6 +86,7 @@ pnpm db:push
 #### Se estiver usando SQLite:
 
 Execute apenas as migrações (o arquivo será criado automaticamente):
+
 ```powershell
 pnpm db:push
 ```
@@ -118,15 +122,15 @@ http://localhost:5173
 
 ## 🎯 Scripts Disponíveis
 
-| Comando | Descrição |
-|---------|-----------|
-| `pnpm dev` | Inicia o servidor de desenvolvimento |
-| `pnpm build` | Compila o projeto para produção |
-| `pnpm start` | Inicia o servidor em modo produção |
-| `pnpm check` | Verifica erros de TypeScript |
-| `pnpm format` | Formata o código com Prettier |
-| `pnpm test` | Executa os testes |
-| `pnpm db:push` | Aplica migrações no banco de dados |
+| Comando        | Descrição                            |
+| -------------- | ------------------------------------ |
+| `pnpm dev`     | Inicia o servidor de desenvolvimento |
+| `pnpm build`   | Compila o projeto para produção      |
+| `pnpm start`   | Inicia o servidor em modo produção   |
+| `pnpm check`   | Verifica erros de TypeScript         |
+| `pnpm format`  | Formata o código com Prettier        |
+| `pnpm test`    | Executa os testes                    |
+| `pnpm db:push` | Aplica migrações no banco de dados   |
 
 ## 🔐 Autenticação Local
 
@@ -142,6 +146,7 @@ Para desenvolvimento local sem OAuth, você pode modificar temporariamente o có
 Se precisar de autenticação completa:
 
 1. Configure as variáveis no `.env`:
+
 ```env
 VITE_APP_ID=seu_app_id
 OAUTH_SERVER_URL=url_do_servidor_oauth
@@ -168,6 +173,7 @@ O projeto usa as seguintes tabelas:
 ### Erro: "Cannot connect to MySQL"
 
 **Soluções:**
+
 1. Verifique se o MySQL está rodando
 2. Confirme usuário e senha no `.env`
 3. Certifique-se de que o banco `festeja_kids` foi criado
@@ -175,6 +181,7 @@ O projeto usa as seguintes tabelas:
 ### Erro: "Port 5000 already in use"
 
 **Solução:** Outra aplicação está usando a porta. Você pode:
+
 1. Fechar a aplicação que está usando a porta
 2. Ou modificar a porta no arquivo de configuração do servidor
 

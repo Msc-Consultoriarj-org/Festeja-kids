@@ -72,9 +72,7 @@
       "compositePrimaryKeys": {
         "clientes_id": {
           "name": "clientes_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -150,9 +148,7 @@
       "compositePrimaryKeys": {
         "custosFixos_id": {
           "name": "custosFixos_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -229,9 +225,7 @@
       "compositePrimaryKeys": {
         "custosVariaveis_id": {
           "name": "custosVariaveis_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -349,17 +343,13 @@
       "compositePrimaryKeys": {
         "festas_id": {
           "name": "festas_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {
         "festas_codigo_unique": {
           "name": "festas_codigo_unique",
-          "columns": [
-            "codigo"
-          ]
+          "columns": ["codigo"]
         }
       },
       "checkConstraint": {}
@@ -423,9 +413,7 @@
       "compositePrimaryKeys": {
         "pagamentos_id": {
           "name": "pagamentos_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -508,17 +496,13 @@
       "compositePrimaryKeys": {
         "users_id": {
           "name": "users_id",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {
         "users_openId_unique": {
           "name": "users_openId_unique",
-          "columns": [
-            "openId"
-          ]
+          "columns": ["openId"]
         }
       },
       "checkConstraint": {}

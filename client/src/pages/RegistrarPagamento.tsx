@@ -1,7 +1,13 @@
 import { useAuth } from "@/_core/hooks/useAuth";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -21,7 +27,8 @@ import { useLocation } from "wouter";
 export default function RegistrarPagamento() {
   const { user, loading: authLoading } = useAuth();
   const [, setLocation] = useLocation();
-  const { data: festas, isLoading: loadingFestas } = trpc.festas.list.useQuery();
+  const { data: festas, isLoading: loadingFestas } =
+    trpc.festas.list.useQuery();
   const createPagamento = trpc.pagamentos.create.useMutation();
 
   const [formData, setFormData] = useState({
@@ -32,7 +39,8 @@ export default function RegistrarPagamento() {
     observacoes: "",
   });
 
-  const festasSelecionaveis = festas?.filter(f => f.valorPago < f.valorTotal) || [];
+  const festasSelecionaveis =
+    festas?.filter(f => f.valorPago < f.valorTotal) || [];
   const festaSelecionada = festas?.find(f => f.codigo === formData.codigo);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -58,7 +66,9 @@ export default function RegistrarPagamento() {
     const saldoDevedor = festa.valorTotal - festa.valorPago;
 
     if (valorEmCentavos > saldoDevedor) {
-      toast.error(`Valor excede o saldo devedor de R$ ${(saldoDevedor / 100).toFixed(2)}`);
+      toast.error(
+        `Valor excede o saldo devedor de R$ ${(saldoDevedor / 100).toFixed(2)}`
+      );
       return;
     }
 
@@ -99,7 +109,9 @@ export default function RegistrarPagamento() {
             <DollarSign className="h-8 w-8" />
             Registrar Pagamento
           </h1>
-          <p className="text-muted-foreground">Registre um novo pagamento recebido</p>
+          <p className="text-muted-foreground">
+            Registre um novo pagamento recebido
+          </p>
         </div>
 
         <Card>
@@ -116,12 +128,16 @@ export default function RegistrarPagamento() {
                 {loadingFestas ? (
                   <div className="flex items-center gap-2">
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    <span className="text-sm text-muted-foreground">Carregando festas...</span>
+                    <span className="text-sm text-muted-foreground">
+                      Carregando festas...
+                    </span>
                   </div>
                 ) : (
                   <Select
                     value={formData.codigo}
-                    onValueChange={(value) => setFormData({ ...formData, codigo: value })}
+                    onValueChange={value =>
+                      setFormData({ ...formData, codigo: value })
+                    }
                   >
                     <SelectTrigger id="codigo">
                       <SelectValue placeholder="Selecione uma festa" />
@@ -132,10 +148,14 @@ export default function RegistrarPagamento() {
                           Nenhuma festa com saldo devedor
                         </SelectItem>
                       ) : (
-                        festasSelecionaveis.map((festa) => (
+                        festasSelecionaveis.map(festa => (
                           <SelectItem key={festa.id} value={festa.codigo}>
                             {festa.codigo} - {festa.clienteNome} (Saldo: R${" "}
-                            {((festa.valorTotal - festa.valorPago) / 100).toFixed(2)})
+                            {(
+                              (festa.valorTotal - festa.valorPago) /
+                              100
+                            ).toFixed(2)}
+                            )
                           </SelectItem>
                         ))
                       )}
@@ -157,7 +177,11 @@ export default function RegistrarPagamento() {
                     </p>
                     <p className="text-orange-600 font-semibold">
                       <strong>Saldo Devedor:</strong> R${" "}
-                      {((festaSelecionada.valorTotal - festaSelecionada.valorPago) / 100).toFixed(2)}
+                      {(
+                        (festaSelecionada.valorTotal -
+                          festaSelecionada.valorPago) /
+                        100
+                      ).toFixed(2)}
                     </p>
                   </div>
                 )}
@@ -172,7 +196,9 @@ export default function RegistrarPagamento() {
                   min="0.01"
                   placeholder="0,00"
                   value={formData.valor}
-                  onChange={(e) => setFormData({ ...formData, valor: e.target.value })}
+                  onChange={e =>
+                    setFormData({ ...formData, valor: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -183,7 +209,9 @@ export default function RegistrarPagamento() {
                   id="dataPagamento"
                   type="date"
                   value={formData.dataPagamento}
-                  onChange={(e) => setFormData({ ...formData, dataPagamento: e.target.value })}
+                  onChange={e =>
+                    setFormData({ ...formData, dataPagamento: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -192,7 +220,9 @@ export default function RegistrarPagamento() {
                 <Label htmlFor="metodoPagamento">Forma de Pagamento</Label>
                 <Select
                   value={formData.metodoPagamento}
-                  onValueChange={(value) => setFormData({ ...formData, metodoPagamento: value })}
+                  onValueChange={value =>
+                    setFormData({ ...formData, metodoPagamento: value })
+                  }
                 >
                   <SelectTrigger id="metodoPagamento">
                     <SelectValue placeholder="Selecione a forma de pagamento" />
@@ -200,9 +230,15 @@ export default function RegistrarPagamento() {
                   <SelectContent>
                     <SelectItem value="dinheiro">Dinheiro</SelectItem>
                     <SelectItem value="pix">PIX</SelectItem>
-                    <SelectItem value="cartao_credito">Cartão de Crédito</SelectItem>
-                    <SelectItem value="cartao_debito">Cartão de Débito</SelectItem>
-                    <SelectItem value="transferencia">Transferência Bancária</SelectItem>
+                    <SelectItem value="cartao_credito">
+                      Cartão de Crédito
+                    </SelectItem>
+                    <SelectItem value="cartao_debito">
+                      Cartão de Débito
+                    </SelectItem>
+                    <SelectItem value="transferencia">
+                      Transferência Bancária
+                    </SelectItem>
                     <SelectItem value="cheque">Cheque</SelectItem>
                   </SelectContent>
                 </Select>
@@ -214,7 +250,9 @@ export default function RegistrarPagamento() {
                   id="observacoes"
                   placeholder="Informações adicionais sobre o pagamento..."
                   value={formData.observacoes}
-                  onChange={(e) => setFormData({ ...formData, observacoes: e.target.value })}
+                  onChange={e =>
+                    setFormData({ ...formData, observacoes: e.target.value })
+                  }
                   rows={3}
                 />
               </div>

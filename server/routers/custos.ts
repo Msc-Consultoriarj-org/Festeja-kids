@@ -4,7 +4,7 @@ import * as db from "../db";
 
 export const custosRouter = router({
   // ============ CUSTOS VARIÁVEIS ============
-  
+
   variaveis: router({
     list: protectedProcedure.query(async () => {
       return db.getAllCustosVariaveis();
@@ -136,10 +136,10 @@ export const custosRouter = router({
     const custosVariaveis = await db.getActiveCustosVariaveis();
     const custosFixos = await db.getActiveCustosFixos();
     const totalFixoMensal = await db.calcularCustoTotalFixoMensal();
-    
+
     // Calcula custo variável base (sem considerar percentuais)
     const custoVariavelBase = custosVariaveis
-      .filter((c) => !c.percentual || c.percentual === 0)
+      .filter(c => !c.percentual || c.percentual === 0)
       .reduce((sum, c) => sum + c.valor, 0);
 
     return {

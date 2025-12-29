@@ -17,7 +17,9 @@ import { useState } from "react";
 
 export default function Clientes() {
   const [searchTerm, setSearchTerm] = useState("");
-  const { data: clientes, isLoading } = trpc.clientes.search.useQuery({ searchTerm });
+  const { data: clientes, isLoading } = trpc.clientes.search.useQuery({
+    searchTerm,
+  });
 
   if (isLoading) {
     return (
@@ -35,9 +37,7 @@ export default function Clientes() {
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold">Clientes</h1>
-            <p className="text-muted-foreground mt-1">
-              Gerencie seus clientes
-            </p>
+            <p className="text-muted-foreground mt-1">Gerencie seus clientes</p>
           </div>
           <Link href="/clientes/novo">
             <Button>
@@ -56,7 +56,7 @@ export default function Clientes() {
                 <Input
                   placeholder="Buscar cliente..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={e => setSearchTerm(e.target.value)}
                   className="pl-8"
                 />
               </div>
@@ -74,9 +74,11 @@ export default function Clientes() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {clientes.map((cliente) => (
+                  {clientes.map(cliente => (
                     <TableRow key={cliente.id}>
-                      <TableCell className="font-medium">{cliente.nome}</TableCell>
+                      <TableCell className="font-medium">
+                        {cliente.nome}
+                      </TableCell>
                       <TableCell>{cliente.telefone || "-"}</TableCell>
                       <TableCell>{cliente.email || "-"}</TableCell>
                       <TableCell className="text-right">

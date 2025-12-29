@@ -61,20 +61,20 @@ export const festasRouter = router({
     .mutation(async ({ input }) => {
       // Gerar código automático: MMDDYYXX (data fechamento + iniciais cliente)
       const dataFechamento = new Date(input.dataFechamento);
-      const mes = String(dataFechamento.getMonth() + 1).padStart(2, '0');
-      const dia = String(dataFechamento.getDate()).padStart(2, '0');
+      const mes = String(dataFechamento.getMonth() + 1).padStart(2, "0");
+      const dia = String(dataFechamento.getDate()).padStart(2, "0");
       const ano = String(dataFechamento.getFullYear()).slice(2);
-      
+
       // Buscar cliente para pegar iniciais
       const cliente = await db.getClienteById(input.clienteId);
       if (!cliente) {
         throw new Error("Cliente não encontrado");
       }
-      
+
       // Pegar primeiras duas letras do nome
       const iniciais = cliente.nome.substring(0, 2).toUpperCase();
       const codigoBase = `${mes}${dia}${ano}${iniciais}`;
-      
+
       // Verificar se já existe e adicionar sufixo se necessário
       let codigo = codigoBase;
       let contador = 1;
@@ -82,7 +82,7 @@ export const festasRouter = router({
         codigo = `${codigoBase}${contador}`;
         contador++;
       }
-      
+
       const id = await db.createFesta({
         codigo,
         ...input,
@@ -113,14 +113,14 @@ export const festasRouter = router({
     .mutation(async ({ input }) => {
       const { id, dataFechamento, dataFesta, ...rest } = input;
       const updateData: any = { ...rest };
-      
+
       if (dataFechamento) {
         updateData.dataFechamento = new Date(dataFechamento);
       }
       if (dataFesta) {
         updateData.dataFesta = new Date(dataFesta);
       }
-      
+
       await db.updateFesta(id, updateData);
       return { success: true };
     }),
@@ -145,32 +145,31 @@ export const festasRouter = router({
       const day = String(date.getDate()).padStart(2, "0");
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const year = String(date.getFullYear()).slice(-2);
-      
+
       // Pega as duas primeiras letras do nome do cliente em maiúsculas
       const initials = input.nomeCliente
         .trim()
         .slice(0, 2)
         .toUpperCase()
         .replace(/[^A-Z]/g, "");
-      
+
       return `${day}${month}${year}${initials}`;
     }),
 
   // Estatísticas
   stats: protectedProcedure.query(async () => {
     const todasFestas = await db.getAllFestas();
-    const agendadas = todasFestas.filter((f) => f.status === "agendada");
-    const realizadas = todasFestas.filter((f) => f.status === "realizada");
-    
+    const agendadas = todasFestas.filter(f => f.status === "agendada");
+    const realizadas = todasFestas.filter(f => f.status === "realizada");
+
     const valorTotal = todasFestas.reduce((sum, f) => sum + f.valorTotal, 0);
     const valorPago = todasFestas.reduce((sum, f) => sum + f.valorPago, 0);
     const valorAReceber = valorTotal - valorPago;
-    
+
     // Ticket médio considera todas as festas (agendadas + realizadas) pois são vendas confirmadas
-    const ticketMedio = todasFestas.length > 0
-      ? valorTotal / todasFestas.length
-      : 0;
-    
+    const ticketMedio =
+      todasFestas.length > 0 ? valorTotal / todasFestas.length : 0;
+
     return {
       total: todasFestas.length,
       agendadas: agendadas.length,

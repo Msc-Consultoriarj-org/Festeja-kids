@@ -39,10 +39,10 @@ if (festasJaneiro.length === 0) {
 }
 
 // Preparar eventos para o Google Calendar
-const eventos = festasJaneiro.map((festa) => {
+const eventos = festasJaneiro.map(festa => {
   const dataFesta = new Date(festa.dataFesta);
   const dataFormatada = dataFesta.toISOString().split("T")[0]; // YYYY-MM-DD
-  
+
   // Se tem horário, usar como evento com hora específica
   let startTime, endTime;
   if (festa.horario) {
@@ -62,7 +62,7 @@ const eventos = festasJaneiro.map((festa) => {
     startTime = dataFormatada;
     endTime = dataFormatada;
   }
-  
+
   const descricao = [
     `Código: ${festa.codigo}`,
     `Cliente: ${festa.clienteNome || "N/A"}`,
@@ -70,7 +70,7 @@ const eventos = festasJaneiro.map((festa) => {
     `Tema: ${festa.tema || "N/A"}`,
     `Valor: R$ ${(festa.valorTotal / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
   ].join("\\n");
-  
+
   return {
     summary: `🎉 Festa - ${festa.clienteNome || festa.codigo}`,
     description: descricao,
@@ -91,7 +91,7 @@ try {
     `manus-mcp-cli tool call google_calendar_create_events --server google-calendar --input '${eventsJson}'`,
     { encoding: "utf-8", maxBuffer: 10 * 1024 * 1024 }
   );
-  
+
   console.log("\\n✅ Eventos criados com sucesso!");
   console.log(result);
 } catch (error) {

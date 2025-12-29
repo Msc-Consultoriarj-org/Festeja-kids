@@ -2,7 +2,13 @@ import { useAuth } from "@/_core/hooks/useAuth";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -12,7 +18,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { trpc } from "@/lib/trpc";
-import { DollarSign, Loader2, Plus, TrendingDown, TrendingUp, Wallet } from "lucide-react";
+import {
+  DollarSign,
+  Loader2,
+  Plus,
+  TrendingDown,
+  TrendingUp,
+  Wallet,
+} from "lucide-react";
 import { useMemo } from "react";
 import {
   LineChart,
@@ -30,12 +43,21 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const COLORS = ["#10b981", "#f59e0b", "#3b82f6", "#8b5cf6", "#ec4899", "#f97316"];
+const COLORS = [
+  "#10b981",
+  "#f59e0b",
+  "#3b82f6",
+  "#8b5cf6",
+  "#ec4899",
+  "#f97316",
+];
 
 export default function Financeiro() {
   const { user, loading: authLoading } = useAuth();
-  const { data: festas, isLoading: loadingFestas } = trpc.festas.list.useQuery();
-  const { data: pagamentos, isLoading: loadingPagamentos } = trpc.pagamentos.listAll.useQuery();
+  const { data: festas, isLoading: loadingFestas } =
+    trpc.festas.list.useQuery();
+  const { data: pagamentos, isLoading: loadingPagamentos } =
+    trpc.pagamentos.listAll.useQuery();
 
   const estatisticas = useMemo(() => {
     if (!festas || !pagamentos) return null;
@@ -43,11 +65,14 @@ export default function Financeiro() {
     const totalFaturamento = festas.reduce((sum, f) => sum + f.valorTotal, 0);
     const totalRecebido = pagamentos.reduce((sum, p) => sum + p.valor, 0);
     const totalAReceber = totalFaturamento - totalRecebido;
-    
+
     // Agrupar pagamentos por mês
     const pagamentosPorMes: Record<string, number> = {};
-    pagamentos.forEach((p) => {
-      const mes = new Date(p.dataPagamento).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+    pagamentos.forEach(p => {
+      const mes = new Date(p.dataPagamento).toLocaleDateString("pt-BR", {
+        month: "long",
+        year: "numeric",
+      });
       pagamentosPorMes[mes] = (pagamentosPorMes[mes] || 0) + p.valor;
     });
 
@@ -72,11 +97,14 @@ export default function Financeiro() {
 
     // Festas com saldo devedor
     const festasComSaldo = festas.filter(f => f.valorPago < f.valorTotal);
-    
+
     // Festas por mês
     const festasPorMes: Record<string, number> = {};
-    festas.forEach((f) => {
-      const mes = new Date(f.dataFesta).toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
+    festas.forEach(f => {
+      const mes = new Date(f.dataFesta).toLocaleDateString("pt-BR", {
+        month: "long",
+        year: "numeric",
+      });
       festasPorMes[mes] = (festasPorMes[mes] || 0) + 1;
     });
 
@@ -91,14 +119,15 @@ export default function Financeiro() {
         mes: mes.split(" de ")[0].substring(0, 3),
         quantidade,
       }));
-    
+
     return {
       totalFaturamento,
       totalRecebido,
       totalAReceber,
       pagamentosPorMes,
       festasComSaldo,
-      percentualRecebido: totalFaturamento > 0 ? (totalRecebido / totalFaturamento) * 100 : 0,
+      percentualRecebido:
+        totalFaturamento > 0 ? (totalRecebido / totalFaturamento) * 100 : 0,
       dadosGraficoMensal,
       dadosGraficoPizza,
       dadosGraficoFestas,
@@ -126,9 +155,14 @@ export default function Financeiro() {
               <Wallet className="h-8 w-8" />
               Financeiro
             </h1>
-            <p className="text-muted-foreground">Visão completa do fluxo de caixa e recebimentos</p>
+            <p className="text-muted-foreground">
+              Visão completa do fluxo de caixa e recebimentos
+            </p>
           </div>
-          <Button onClick={() => window.location.href = "/financeiro/registrar"} className="gap-2">
+          <Button
+            onClick={() => (window.location.href = "/financeiro/registrar")}
+            className="gap-2"
+          >
             <Plus className="h-4 w-4" />
             Registrar Pagamento
           </Button>
@@ -151,7 +185,11 @@ export default function Financeiro() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold">
-                    R$ {(estatisticas.totalFaturamento / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                    R${" "}
+                    {(estatisticas.totalFaturamento / 100).toLocaleString(
+                      "pt-BR",
+                      { minimumFractionDigits: 2 }
+                    )}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
                     Valor total de todas as festas
@@ -168,10 +206,15 @@ export default function Financeiro() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-green-600">
-                    R$ {(estatisticas.totalRecebido / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                    R${" "}
+                    {(estatisticas.totalRecebido / 100).toLocaleString(
+                      "pt-BR",
+                      { minimumFractionDigits: 2 }
+                    )}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {estatisticas.percentualRecebido.toFixed(1)}% do faturamento total
+                    {estatisticas.percentualRecebido.toFixed(1)}% do faturamento
+                    total
                   </p>
                 </CardContent>
               </Card>
@@ -179,16 +222,20 @@ export default function Financeiro() {
               <Card>
                 <CardHeader className="pb-3">
                   <CardTitle className="text-sm font-medium flex items-center gap-2 text-orange-600">
-                    <TrendingDown className="h-4 w-4" />
-                    A Receber
+                    <TrendingDown className="h-4 w-4" />A Receber
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="text-2xl font-bold text-orange-600">
-                    R$ {(estatisticas.totalAReceber / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                    R${" "}
+                    {(estatisticas.totalAReceber / 100).toLocaleString(
+                      "pt-BR",
+                      { minimumFractionDigits: 2 }
+                    )}
                   </div>
                   <p className="text-xs text-muted-foreground mt-1">
-                    {estatisticas.festasComSaldo.length} festas com saldo pendente
+                    {estatisticas.festasComSaldo.length} festas com saldo
+                    pendente
                   </p>
                 </CardContent>
               </Card>
@@ -209,9 +256,14 @@ export default function Financeiro() {
                       <XAxis dataKey="mes" stroke="#9ca3af" />
                       <YAxis stroke="#9ca3af" />
                       <Tooltip
-                        contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151" }}
+                        contentStyle={{
+                          backgroundColor: "#1f2937",
+                          border: "1px solid #374151",
+                        }}
                         labelStyle={{ color: "#f3f4f6" }}
-                        formatter={(value: number) => `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`}
+                        formatter={(value: number) =>
+                          `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
+                        }
                       />
                       <Legend />
                       <Line
@@ -231,7 +283,9 @@ export default function Financeiro() {
               <Card>
                 <CardHeader>
                   <CardTitle>Distribuição Financeira</CardTitle>
-                  <CardDescription>Proporção de valores recebidos e pendentes</CardDescription>
+                  <CardDescription>
+                    Proporção de valores recebidos e pendentes
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
@@ -241,18 +295,28 @@ export default function Financeiro() {
                         cx="50%"
                         cy="50%"
                         labelLine={false}
-                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                        label={({ name, percent }) =>
+                          `${name}: ${(percent * 100).toFixed(0)}%`
+                        }
                         outerRadius={100}
                         fill="#8884d8"
                         dataKey="value"
                       >
                         {estatisticas.dadosGraficoPizza.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={index === 0 ? "#10b981" : "#f59e0b"} />
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={index === 0 ? "#10b981" : "#f59e0b"}
+                          />
                         ))}
                       </Pie>
                       <Tooltip
-                        contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151" }}
-                        formatter={(value: number) => `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`}
+                        contentStyle={{
+                          backgroundColor: "#1f2937",
+                          border: "1px solid #374151",
+                        }}
+                        formatter={(value: number) =>
+                          `R$ ${value.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`
+                        }
                       />
                     </PieChart>
                   </ResponsiveContainer>
@@ -263,7 +327,9 @@ export default function Financeiro() {
               <Card className="lg:col-span-2">
                 <CardHeader>
                   <CardTitle>Festas por Mês</CardTitle>
-                  <CardDescription>Quantidade de festas agendadas nos últimos 6 meses</CardDescription>
+                  <CardDescription>
+                    Quantidade de festas agendadas nos últimos 6 meses
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <ResponsiveContainer width="100%" height={300}>
@@ -272,11 +338,18 @@ export default function Financeiro() {
                       <XAxis dataKey="mes" stroke="#9ca3af" />
                       <YAxis stroke="#9ca3af" />
                       <Tooltip
-                        contentStyle={{ backgroundColor: "#1f2937", border: "1px solid #374151" }}
+                        contentStyle={{
+                          backgroundColor: "#1f2937",
+                          border: "1px solid #374151",
+                        }}
                         labelStyle={{ color: "#f3f4f6" }}
                       />
                       <Legend />
-                      <Bar dataKey="quantidade" fill="#3b82f6" name="Quantidade de Festas" />
+                      <Bar
+                        dataKey="quantidade"
+                        fill="#3b82f6"
+                        name="Quantidade de Festas"
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -288,7 +361,8 @@ export default function Financeiro() {
               <CardHeader>
                 <CardTitle>Festas com Saldo Devedor</CardTitle>
                 <CardDescription>
-                  {estatisticas.festasComSaldo.length} festas com pagamento pendente
+                  {estatisticas.festasComSaldo.length} festas com pagamento
+                  pendente
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -306,27 +380,51 @@ export default function Financeiro() {
                   </TableHeader>
                   <TableBody>
                     {estatisticas.festasComSaldo
-                      .sort((a, b) => new Date(a.dataFesta).getTime() - new Date(b.dataFesta).getTime())
-                      .map((festa) => {
+                      .sort(
+                        (a, b) =>
+                          new Date(a.dataFesta).getTime() -
+                          new Date(b.dataFesta).getTime()
+                      )
+                      .map(festa => {
                         const saldo = festa.valorTotal - festa.valorPago;
                         return (
                           <TableRow key={festa.id}>
-                            <TableCell className="font-medium">{festa.codigo}</TableCell>
+                            <TableCell className="font-medium">
+                              {festa.codigo}
+                            </TableCell>
                             <TableCell>{festa.clienteNome}</TableCell>
                             <TableCell>
-                              {new Date(festa.dataFesta).toLocaleDateString("pt-BR")}
+                              {new Date(festa.dataFesta).toLocaleDateString(
+                                "pt-BR"
+                              )}
                             </TableCell>
                             <TableCell className="text-right">
-                              R$ {(festa.valorTotal / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                              R${" "}
+                              {(festa.valorTotal / 100).toLocaleString(
+                                "pt-BR",
+                                { minimumFractionDigits: 2 }
+                              )}
                             </TableCell>
                             <TableCell className="text-right text-green-600">
-                              R$ {(festa.valorPago / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                              R${" "}
+                              {(festa.valorPago / 100).toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2,
+                              })}
                             </TableCell>
                             <TableCell className="text-right font-semibold text-orange-600">
-                              R$ {(saldo / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                              R${" "}
+                              {(saldo / 100).toLocaleString("pt-BR", {
+                                minimumFractionDigits: 2,
+                              })}
                             </TableCell>
                             <TableCell>
-                              <Badge variant={festa.status === "agendada" ? "default" : "secondary"}>
+                              <Badge
+                                variant={
+                                  festa.status === "agendada"
+                                    ? "default"
+                                    : "secondary"
+                                }
+                              >
                                 {festa.status}
                               </Badge>
                             </TableCell>
