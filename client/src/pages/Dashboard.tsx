@@ -1,8 +1,19 @@
 import DashboardLayout from "@/components/DashboardLayout";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { trpc } from "@/lib/trpc";
+import { Skeleton } from "@/components/ui/skeleton";
 import { formatCurrency } from "@/const";
-import { Calendar, DollarSign, PartyPopper, TrendingUp } from "lucide-react";
+import { trpc } from "@/lib/trpc";
+import {
+  ArrowRight,
+  BarChart3,
+  Calendar,
+  DollarSign,
+  PartyPopper,
+  TrendingUp,
+  Users,
+} from "lucide-react";
+import { Link } from "wouter";
 
 export default function Dashboard() {
   const { data: stats, isLoading } = trpc.festas.stats.useQuery();
@@ -10,8 +21,29 @@ export default function Dashboard() {
   if (isLoading) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-4 w-64" />
+          </div>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i}>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-4 rounded-full" />
+                </CardHeader>
+                <CardContent>
+                  <Skeleton className="h-8 w-16 mb-2" />
+                  <Skeleton className="h-3 w-full" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Skeleton className="h-[200px]" />
+            <Skeleton className="h-[200px]" />
+          </div>
         </div>
       </DashboardLayout>
     );
@@ -33,7 +65,10 @@ export default function Dashboard() {
               <CardTitle className="text-sm font-medium">
                 Total de Festas
               </CardTitle>
-              <PartyPopper className="h-4 w-4 text-muted-foreground" />
+              <PartyPopper
+                className="h-4 w-4 text-muted-foreground"
+                aria-hidden="true"
+              />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats?.total || 0}</div>
@@ -49,7 +84,10 @@ export default function Dashboard() {
               <CardTitle className="text-sm font-medium">
                 Faturamento Total
               </CardTitle>
-              <DollarSign className="h-4 w-4 text-muted-foreground" />
+              <DollarSign
+                className="h-4 w-4 text-muted-foreground"
+                aria-hidden="true"
+              />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
@@ -66,7 +104,10 @@ export default function Dashboard() {
               <CardTitle className="text-sm font-medium">
                 Valor a Receber
               </CardTitle>
-              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+              <TrendingUp
+                className="h-4 w-4 text-muted-foreground"
+                aria-hidden="true"
+              />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
@@ -83,7 +124,10 @@ export default function Dashboard() {
               <CardTitle className="text-sm font-medium">
                 Ticket Médio
               </CardTitle>
-              <Calendar className="h-4 w-4 text-muted-foreground" />
+              <Calendar
+                className="h-4 w-4 text-muted-foreground"
+                aria-hidden="true"
+              />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
@@ -97,28 +141,78 @@ export default function Dashboard() {
         </div>
 
         <div className="grid gap-4 md:grid-cols-2">
-          <Card>
+          <Card className="flex flex-col">
             <CardHeader>
-              <CardTitle>Próximas Ações</CardTitle>
+              <CardTitle>Acesso Rápido</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              <p className="text-sm text-muted-foreground">
-                Use o menu lateral para navegar pelas funcionalidades:
-              </p>
-              <ul className="text-sm space-y-1 ml-4 list-disc">
-                <li>
-                  Gerencie suas festas em <strong>Festas</strong>
-                </li>
-                <li>
-                  Cadastre e consulte clientes em <strong>Clientes</strong>
-                </li>
-                <li>
-                  Controle custos em <strong>Custos</strong>
-                </li>
-                <li>
-                  Visualize relatórios em <strong>Relatórios</strong>
-                </li>
-              </ul>
+            <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Button
+                asChild
+                variant="outline"
+                className="w-full justify-start h-auto py-3 px-4 hover:border-primary/50 hover:bg-primary/5 transition-all group"
+              >
+                <Link href="/festas">
+                  <PartyPopper className="mr-3 h-5 w-5 text-primary" />
+                  <div className="flex flex-col items-start gap-1">
+                    <span className="font-semibold">Festas</span>
+                    <span className="text-xs text-muted-foreground font-normal group-hover:text-primary/80">
+                      Gerenciar eventos
+                    </span>
+                  </div>
+                  <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
+                </Link>
+              </Button>
+
+              <Button
+                asChild
+                variant="outline"
+                className="w-full justify-start h-auto py-3 px-4 hover:border-primary/50 hover:bg-primary/5 transition-all group"
+              >
+                <Link href="/clientes">
+                  <Users className="mr-3 h-5 w-5 text-primary" />
+                  <div className="flex flex-col items-start gap-1">
+                    <span className="font-semibold">Clientes</span>
+                    <span className="text-xs text-muted-foreground font-normal group-hover:text-primary/80">
+                      Base de contatos
+                    </span>
+                  </div>
+                  <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
+                </Link>
+              </Button>
+
+              <Button
+                asChild
+                variant="outline"
+                className="w-full justify-start h-auto py-3 px-4 hover:border-primary/50 hover:bg-primary/5 transition-all group"
+              >
+                <Link href="/custos">
+                  <DollarSign className="mr-3 h-5 w-5 text-primary" />
+                  <div className="flex flex-col items-start gap-1">
+                    <span className="font-semibold">Custos</span>
+                    <span className="text-xs text-muted-foreground font-normal group-hover:text-primary/80">
+                      Controle financeiro
+                    </span>
+                  </div>
+                  <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
+                </Link>
+              </Button>
+
+              <Button
+                asChild
+                variant="outline"
+                className="w-full justify-start h-auto py-3 px-4 hover:border-primary/50 hover:bg-primary/5 transition-all group"
+              >
+                <Link href="/relatorios">
+                  <BarChart3 className="mr-3 h-5 w-5 text-primary" />
+                  <div className="flex flex-col items-start gap-1">
+                    <span className="font-semibold">Relatórios</span>
+                    <span className="text-xs text-muted-foreground font-normal group-hover:text-primary/80">
+                      Análise de dados
+                    </span>
+                  </div>
+                  <ArrowRight className="ml-auto h-4 w-4 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
+                </Link>
+              </Button>
             </CardContent>
           </Card>
 
