@@ -254,7 +254,10 @@ export function AIChatBox({
                   >
                     {message.role === "assistant" && (
                       <div className="size-8 shrink-0 mt-1 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Sparkles className="size-4 text-primary" />
+                        <Sparkles
+                          className="size-4 text-primary"
+                          aria-hidden="true"
+                        />
                       </div>
                     )}
 
@@ -279,7 +282,10 @@ export function AIChatBox({
 
                     {message.role === "user" && (
                       <div className="size-8 shrink-0 mt-1 rounded-full bg-secondary flex items-center justify-center">
-                        <User className="size-4 text-secondary-foreground" />
+                        <User
+                          className="size-4 text-secondary-foreground"
+                          aria-hidden="true"
+                        />
                       </div>
                     )}
                   </div>
@@ -296,7 +302,10 @@ export function AIChatBox({
                   }
                 >
                   <div className="size-8 shrink-0 mt-1 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Sparkles className="size-4 text-primary" />
+                    <Sparkles
+                      className="size-4 text-primary"
+                      aria-hidden="true"
+                    />
                   </div>
                   <div className="rounded-lg bg-muted px-4 py-2.5">
                     <Loader2
@@ -323,6 +332,7 @@ export function AIChatBox({
           onChange={e => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
+          aria-label={placeholder}
           className="flex-1 max-h-32 resize-none min-h-9"
           rows={1}
         />
