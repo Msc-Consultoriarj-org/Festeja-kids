@@ -35,12 +35,12 @@ export default function Festas() {
       toast.success("Festa excluída com sucesso!");
       utils.festas.list.invalidate();
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(`Erro ao excluir festa: ${error.message}`);
     },
   });
 
-  const festasFiltradas = festas?.filter((festa) => {
+  const festasFiltradas = festas?.filter(festa => {
     if (statusFilter === "todas") return true;
     return festa.status === statusFilter;
   });
@@ -161,7 +161,11 @@ export default function Festas() {
                             variant="ghost"
                             size="icon"
                             onClick={() => {
-                              if (confirm("Tem certeza que deseja excluir esta festa?")) {
+                              if (
+                                confirm(
+                                  "Tem certeza que deseja excluir esta festa?"
+                                )
+                              ) {
                                 deleteMutation.mutate({ id: festa.id });
                               }
                             }}
