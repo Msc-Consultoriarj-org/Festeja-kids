@@ -38,6 +38,7 @@ import {
   CheckCircle2,
   Calendar as CalendarIcon,
 } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import { Link } from "wouter";
 import { motion } from "framer-motion";
 
@@ -106,15 +107,16 @@ export default function Agendamento() {
     <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 font-sans">
       <div className="max-w-4xl mx-auto">
         <div className="mb-8">
-          <Link href="/">
-            <Button
-              variant="ghost"
-              className="pl-0 hover:pl-2 transition-all text-slate-600 hover:text-pink-600"
-            >
+          <Button
+            asChild
+            variant="ghost"
+            className="pl-0 hover:pl-2 transition-all text-slate-600 hover:text-pink-600"
+          >
+            <Link href="/">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Voltar para o início
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </div>
 
         {step === 3 ? (
@@ -346,9 +348,14 @@ export default function Agendamento() {
                             disabled={createMutation.isPending}
                             className="bg-pink-600 hover:bg-pink-700 text-white rounded-full px-8"
                           >
-                            {createMutation.isPending
-                              ? "Agendando..."
-                              : "Confirmar Agendamento"}
+                            {createMutation.isPending ? (
+                              <>
+                                <Spinner className="mr-2 h-4 w-4 text-white" />
+                                Agendando...
+                              </>
+                            ) : (
+                              "Confirmar Agendamento"
+                            )}
                           </Button>
                         </div>
                       </form>
