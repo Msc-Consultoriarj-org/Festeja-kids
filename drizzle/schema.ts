@@ -54,34 +54,6 @@ export type InsertCliente = typeof clientes.$inferInsert;
 /**
  * Tabela de festas
  */
-export const festas = mysqlTable("festas", {
-  id: int("id").autoincrement().primaryKey(),
-  nome: varchar("nome", { length: 255 }).notNull(),
-  telefone: varchar("telefone", { length: 20 }),
-  email: varchar("email", { length: 255 }),
-  origem: varchar("origem", { length: 50 }).default("organico"),
-  statusFunil: mysqlEnum("statusFunil", [
-    "novo",
-    "contato",
-    "visita",
-    "proposta",
-    "fechamento",
-    "perdido",
-  ])
-    .default("novo")
-    .notNull(),
-  valorPotencial: int("valorPotencial").default(0),
-  observacoes: text("observacoes"),
-  createdAt: timestamp("createdAt").defaultNow().notNull(),
-  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
-});
-
-export type Cliente = typeof clientes.$inferSelect;
-export type InsertCliente = typeof clientes.$inferInsert;
-
-/**
- * Tabela de festas
- */
 export const festas = mysqlTable(
   "festas",
   {

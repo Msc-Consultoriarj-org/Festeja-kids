@@ -150,6 +150,8 @@ export default function NovaFesta() {
                     variant="outline"
                     size="sm"
                     onClick={() => setMostrarNovoCliente(!mostrarNovoCliente)}
+                    aria-expanded={mostrarNovoCliente}
+                    aria-controls="novo-cliente-section"
                   >
                     {mostrarNovoCliente
                       ? "Selecionar Existente"
@@ -158,7 +160,12 @@ export default function NovaFesta() {
                 </div>
 
                 {mostrarNovoCliente ? (
-                  <div className="border rounded-lg p-4 space-y-4 bg-muted/50">
+                  <div
+                    id="novo-cliente-section"
+                    role="region"
+                    aria-label="Cadastro de novo cliente"
+                    className="border rounded-lg p-4 space-y-4 bg-muted/50 animate-in slide-in-from-top-2 fade-in-0 duration-200"
+                  >
                     <div className="space-y-2">
                       <Label htmlFor="nomeCliente">Nome *</Label>
                       <Input
