@@ -35,12 +35,12 @@ export default function Festas() {
       toast.success("Festa excluída com sucesso!");
       utils.festas.list.invalidate();
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(`Erro ao excluir festa: ${error.message}`);
     },
   });
 
-  const festasFiltradas = festas?.filter((festa) => {
+  const festasFiltradas = festas?.filter(festa => {
     if (statusFilter === "todas") return true;
     return festa.status === statusFilter;
   });
@@ -148,12 +148,20 @@ export default function Festas() {
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Link href={`/festas/${festa.id}`}>
-                            <Button variant="ghost" size="icon">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label="Ver detalhes da festa"
+                            >
                               <Eye className="h-4 w-4" />
                             </Button>
                           </Link>
                           <Link href={`/festas/${festa.id}/editar`}>
-                            <Button variant="ghost" size="icon">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label="Editar festa"
+                            >
                               <Pencil className="h-4 w-4" />
                             </Button>
                           </Link>
@@ -161,11 +169,16 @@ export default function Festas() {
                             variant="ghost"
                             size="icon"
                             onClick={() => {
-                              if (confirm("Tem certeza que deseja excluir esta festa?")) {
+                              if (
+                                confirm(
+                                  "Tem certeza que deseja excluir esta festa?"
+                                )
+                              ) {
                                 deleteMutation.mutate({ id: festa.id });
                               }
                             }}
                             disabled={deleteMutation.isPending}
+                            aria-label="Excluir festa"
                           >
                             <Trash2 className="h-4 w-4" />
                           </Button>
