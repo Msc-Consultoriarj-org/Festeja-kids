@@ -23,6 +23,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function Festas() {
   const [statusFilter, setStatusFilter] = useState<string>("todas");
@@ -35,12 +41,12 @@ export default function Festas() {
       toast.success("Festa excluída com sucesso!");
       utils.festas.list.invalidate();
     },
-    onError: (error) => {
+    onError: error => {
       toast.error(`Erro ao excluir festa: ${error.message}`);
     },
   });
 
-  const festasFiltradas = festas?.filter((festa) => {
+  const festasFiltradas = festas?.filter(festa => {
     if (statusFilter === "todas") return true;
     return festa.status === statusFilter;
   });
@@ -147,28 +153,68 @@ export default function Festas() {
                       <TableCell>{getStatusBadge(festa.status)}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <Link href={`/festas/${festa.id}`}>
-                            <Button variant="ghost" size="icon">
-                              <Eye className="h-4 w-4" />
-                            </Button>
-                          </Link>
-                          <Link href={`/festas/${festa.id}/editar`}>
-                            <Button variant="ghost" size="icon">
-                              <Pencil className="h-4 w-4" />
-                            </Button>
-                          </Link>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => {
-                              if (confirm("Tem certeza que deseja excluir esta festa?")) {
-                                deleteMutation.mutate({ id: festa.id });
-                              }
-                            }}
-                            disabled={deleteMutation.isPending}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Link href={`/festas/${festa.id}`}>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  aria-label="Ver detalhes"
+                                >
+                                  <Eye className="h-4 w-4" />
+                                </Button>
+                              </Link>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Ver detalhes</p>
+                            </TooltipContent>
+                          </Tooltip>
+
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Link href={`/festas/${festa.id}/editar`}>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  aria-label="Editar festa"
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                </Button>
+                              </Link>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Editar festa</p>
+                            </TooltipContent>
+                          </Tooltip>
+
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => {
+                                  if (
+                                    confirm(
+                                      "Tem certeza que deseja excluir esta festa?"
+                                    )
+                                  ) {
+                                    deleteMutation.mutate({ id: festa.id });
+                                  }
+                                }}
+                                disabled={deleteMutation.isPending}
+                                aria-label="Excluir festa"
+                              >
+                                {deleteMutation.isPending ? (
+                                  <Spinner className="h-4 w-4" />
+                                ) : (
+                                  <Trash2 className="h-4 w-4" />
+                                )}
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Excluir festa</p>
+                            </TooltipContent>
+                          </Tooltip>
                         </div>
                       </TableCell>
                     </TableRow>
