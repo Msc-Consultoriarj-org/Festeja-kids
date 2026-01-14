@@ -1,4 +1,5 @@
 import DashboardLayout from "@/components/DashboardLayout";
+import { DashboardContentSkeleton } from "@/components/DashboardContentSkeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { trpc } from "@/lib/trpc";
 import { formatCurrency } from "@/const";
@@ -11,7 +12,13 @@ export default function Dashboard() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div
+            className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"
+            role="status"
+            aria-label="Carregando..."
+          >
+            <span className="sr-only">Carregando...</span>
+          </div>
         </div>
       </DashboardLayout>
     );
