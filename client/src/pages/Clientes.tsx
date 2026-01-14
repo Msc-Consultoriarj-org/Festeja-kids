@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
-import { Plus, Eye, Pencil, Trash2, Search } from "lucide-react";
+import { Plus, Eye, Pencil, Trash2, Search, Loader2 } from "lucide-react";
 import { Link } from "wouter";
 import { useState } from "react";
 
@@ -25,7 +25,10 @@ export default function Clientes() {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <Loader2
+            className="h-8 w-8 animate-spin text-primary"
+            aria-label="Carregando clientes..."
+          />
         </div>
       </DashboardLayout>
     );
@@ -58,6 +61,7 @@ export default function Clientes() {
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
                   className="pl-8"
+                  aria-label="Buscar clientes"
                 />
               </div>
             </div>
@@ -84,18 +88,27 @@ export default function Clientes() {
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
                           <Link href={`/clientes/${cliente.id}`}>
-                            <Button variant="ghost" size="icon">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label="Visualizar cliente"
+                            >
                               <Eye className="h-4 w-4" />
                             </Button>
                           </Link>
                           <Link href={`/clientes/${cliente.id}/editar`}>
-                            <Button variant="ghost" size="icon">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label="Editar cliente"
+                            >
                               <Pencil className="h-4 w-4" />
                             </Button>
                           </Link>
                           <Button
                             variant="ghost"
                             size="icon"
+                            aria-label="Excluir cliente"
                             onClick={() => {
                               // TODO: Implementar exclusão
                               alert("Funcionalidade em desenvolvimento");
