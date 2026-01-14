@@ -79,8 +79,8 @@ export const festas = mysqlTable("festas", {
   ])
     .default("novo")
     .notNull(),
-  valorPotencial: int("valorPotencial").default(0),
-  observacoes: text("observacoes"),
+  origem: varchar("origem", { length: 50 }).default("organico"),
+  valorPotencial: int("valorPotencial").default(0), // em centavos
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
