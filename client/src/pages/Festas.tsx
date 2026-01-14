@@ -153,68 +153,41 @@ export default function Festas() {
                       <TableCell>{getStatusBadge(festa.status)}</TableCell>
                       <TableCell className="text-right">
                         <div className="flex justify-end gap-2">
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Link href={`/festas/${festa.id}`}>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  aria-label="Ver detalhes"
-                                >
-                                  <Eye className="h-4 w-4" />
-                                </Button>
-                              </Link>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Ver detalhes</p>
-                            </TooltipContent>
-                          </Tooltip>
-
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Link href={`/festas/${festa.id}/editar`}>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  aria-label="Editar festa"
-                                >
-                                  <Pencil className="h-4 w-4" />
-                                </Button>
-                              </Link>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Editar festa</p>
-                            </TooltipContent>
-                          </Tooltip>
-
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => {
-                                  if (
-                                    confirm(
-                                      "Tem certeza que deseja excluir esta festa?"
-                                    )
-                                  ) {
-                                    deleteMutation.mutate({ id: festa.id });
-                                  }
-                                }}
-                                disabled={deleteMutation.isPending}
-                                aria-label="Excluir festa"
-                              >
-                                {deleteMutation.isPending ? (
-                                  <Spinner className="h-4 w-4" />
-                                ) : (
-                                  <Trash2 className="h-4 w-4" />
-                                )}
-                              </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>Excluir festa</p>
-                            </TooltipContent>
-                          </Tooltip>
+                          <Link href={`/festas/${festa.id}`}>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label="Ver detalhes da festa"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                          </Link>
+                          <Link href={`/festas/${festa.id}/editar`}>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              aria-label="Editar festa"
+                            >
+                              <Pencil className="h-4 w-4" />
+                            </Button>
+                          </Link>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => {
+                              if (
+                                confirm(
+                                  "Tem certeza que deseja excluir esta festa?"
+                                )
+                              ) {
+                                deleteMutation.mutate({ id: festa.id });
+                              }
+                            }}
+                            disabled={deleteMutation.isPending}
+                            aria-label="Excluir festa"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
                         </div>
                       </TableCell>
                     </TableRow>
