@@ -41,7 +41,16 @@ export const clientes = mysqlTable("clientes", {
   nome: varchar("nome", { length: 255 }).notNull(),
   telefone: varchar("telefone", { length: 20 }),
   email: varchar("email", { length: 320 }),
-  statusFunil: mysqlEnum("statusFunil", ["novo", "contato", "visita", "proposta", "fechamento", "perdido"]).default("novo").notNull(),
+  statusFunil: mysqlEnum("statusFunil", [
+    "novo",
+    "contato",
+    "visita",
+    "proposta",
+    "fechamento",
+    "perdido",
+  ])
+    .default("novo")
+    .notNull(),
   origem: varchar("origem", { length: 50 }).default("organico"),
   valorPotencial: int("valorPotencial").default(0), // em centavos
   createdAt: timestamp("createdAt").defaultNow().notNull(),
