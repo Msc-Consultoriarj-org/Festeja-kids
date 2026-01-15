@@ -11,12 +11,13 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { trpc } from "@/lib/trpc";
-import { Plus, Eye, Pencil, Trash2, Search, Loader2 } from "lucide-react";
+import { Plus, Eye, Pencil, Trash2, Search, Loader2, X } from "lucide-react";
 import { Link } from "wouter";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 export default function Clientes() {
   const [searchTerm, setSearchTerm] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
   const { data: clientes, isLoading } = trpc.clientes.search.useQuery({
     searchTerm,
   });
@@ -55,14 +56,27 @@ export default function Clientes() {
             <div className="flex justify-between items-center gap-4">
               <CardTitle>Lista de Clientes</CardTitle>
               <div className="relative w-64">
-                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground pointer-events-none" />
                 <Input
+                  ref={inputRef}
                   placeholder="Buscar cliente..."
                   value={searchTerm}
                   onChange={e => setSearchTerm(e.target.value)}
-                  className="pl-8"
+                  className="pl-8 pr-8"
                   aria-label="Buscar clientes"
                 />
+                {searchTerm && (
+                  <button
+                    onClick={() => {
+                      setSearchTerm("");
+                      inputRef.current?.focus();
+                    }}
+                    className="absolute right-2 top-2.5 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm transition-colors"
+                    aria-label="Limpar busca"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                )}
               </div>
             </div>
           </CardHeader>
