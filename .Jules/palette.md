@@ -7,3 +7,7 @@
 
 **Learning:** Buttons that toggle content visibility need `aria-expanded` and `aria-controls` to inform screen reader users of the state change and relationship. The toggled content should also be a marked region.
 **Action:** Add `aria-expanded={isOpen}` and `aria-controls="section-id"` to the toggle button. Add `id="section-id"`, `role="region"`, and `aria-label` to the container being toggled.
+## 2025-05-23 - Accessible Loading Skeletons
+
+**Learning:** Skeleton screens improve perceived performance but are often invisible to screen readers, leaving users wondering if the content is loading or just empty.
+**Action:** When using Skeleton components for full-page or section loading, wrap the container in a `div` with `role="status"` and a descriptive `aria-label` (e.g., "Loading dashboard data..."). This ensures screen readers announce the loading state.
