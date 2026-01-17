@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -34,14 +35,16 @@ export default function RegistrarPagamento() {
   const [formData, setFormData] = useState({
     codigo: "",
     valor: "",
-    dataPagamento: new Date().toISOString().split("T")[0],
+    dataPagamento: new Date() as Date | undefined,
     metodoPagamento: "",
     observacoes: "",
   });
 
   const festasSelecionaveis =
-    festas?.filter(f => f.valorPago < f.valorTotal) || [];
-  const festaSelecionada = festas?.find(f => f.codigo === formData.codigo);
+    festas?.filter((f: any) => f.valorPago < f.valorTotal) || [];
+  const festaSelecionada = festas?.find(
+    (f: any) => f.codigo === formData.codigo
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,7 +59,7 @@ export default function RegistrarPagamento() {
       return;
     }
 
-    const festa = festas?.find(f => f.codigo === formData.codigo);
+    const festa = festas?.find((f: any) => f.codigo === formData.codigo);
     if (!festa) {
       toast.error("Festa não encontrada");
       return;
@@ -76,7 +79,9 @@ export default function RegistrarPagamento() {
       await createPagamento.mutateAsync({
         festaId: festa.id,
         valor: valorEmCentavos,
-        dataPagamento: new Date(formData.dataPagamento).getTime(),
+        dataPagamento: formData.dataPagamento
+          ? formData.dataPagamento.getTime()
+          : new Date().getTime(),
         metodoPagamento: formData.metodoPagamento || undefined,
         observacoes: formData.observacoes || undefined,
       });
@@ -148,7 +153,7 @@ export default function RegistrarPagamento() {
                           Nenhuma festa com saldo devedor
                         </SelectItem>
                       ) : (
-                        festasSelecionaveis.map(festa => (
+                        festasSelecionaveis.map((festa: any) => (
                           <SelectItem key={festa.id} value={festa.codigo}>
                             {festa.codigo} - {festa.clienteNome} (Saldo: R${" "}
                             {(
@@ -204,15 +209,13 @@ export default function RegistrarPagamento() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="dataPagamento">Data do Pagamento *</Label>
-                <Input
-                  id="dataPagamento"
-                  type="date"
-                  value={formData.dataPagamento}
-                  onChange={e =>
-                    setFormData({ ...formData, dataPagamento: e.target.value })
+                <Label>Data do Pagamento *</Label>
+                <DatePicker
+                  date={formData.dataPagamento}
+                  setDate={date =>
+                    setFormData({ ...formData, dataPagamento: date })
                   }
-                  required
+                  placeholder="Selecione a data"
                 />
               </div>
 
