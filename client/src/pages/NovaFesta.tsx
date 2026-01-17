@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -30,8 +31,8 @@ export default function NovaFesta() {
 
   const [formData, setFormData] = useState({
     clienteId: "",
-    dataFechamento: "",
-    dataFesta: "",
+    dataFechamento: undefined as Date | undefined,
+    dataFesta: undefined as Date | undefined,
     valorTotal: "",
     numeroConvidados: "",
     tema: "",
@@ -96,8 +97,8 @@ export default function NovaFesta() {
 
     createFesta.mutate({
       clienteId: parseInt(formData.clienteId),
-      dataFechamento: new Date(formData.dataFechamento + "T00:00:00").getTime(),
-      dataFesta: new Date(formData.dataFesta + "T00:00:00").getTime(),
+      dataFechamento: formData.dataFechamento!.getTime(),
+      dataFesta: formData.dataFesta!.getTime(),
       valorTotal: valorEmCentavos,
       numeroConvidados: parseInt(formData.numeroConvidados),
       tema: formData.tema || undefined,
@@ -106,7 +107,7 @@ export default function NovaFesta() {
     });
   };
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: string | Date | undefined) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
@@ -265,7 +266,7 @@ export default function NovaFesta() {
                       <SelectValue placeholder="Selecione um cliente" />
                     </SelectTrigger>
                     <SelectContent>
-                      {clientes?.map(cliente => (
+                      {clientes?.map((cliente: any) => (
                         <SelectItem
                           key={cliente.id}
                           value={cliente.id.toString()}
@@ -282,25 +283,19 @@ export default function NovaFesta() {
               {/* Datas */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="dataFechamento">Data de Fechamento *</Label>
-                  <Input
-                    id="dataFechamento"
-                    type="date"
-                    value={formData.dataFechamento}
-                    onChange={e =>
-                      handleChange("dataFechamento", e.target.value)
-                    }
-                    required
+                  <Label>Data de Fechamento *</Label>
+                  <DatePicker
+                    date={formData.dataFechamento}
+                    setDate={date => handleChange("dataFechamento", date)}
+                    placeholder="Selecione a data de fechamento"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="dataFesta">Data da Festa *</Label>
-                  <Input
-                    id="dataFesta"
-                    type="date"
-                    value={formData.dataFesta}
-                    onChange={e => handleChange("dataFesta", e.target.value)}
-                    required
+                  <Label>Data da Festa *</Label>
+                  <DatePicker
+                    date={formData.dataFesta}
+                    setDate={date => handleChange("dataFesta", date)}
+                    placeholder="Selecione a data da festa"
                   />
                 </div>
               </div>
